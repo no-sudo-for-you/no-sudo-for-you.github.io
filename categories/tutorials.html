@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no-sudo-for-you's Security Lab | Tutorials</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --hover-color: #21262d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: var(--header-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tutorial-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--hover-color);
+        }
+        
+        .tutorial-card h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #d29922;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .wireshark .tag.category {
+            background-color: #1f6feb;
+        }
+        
+        .forensics .tag.category {
+            background-color: #8250df;
+        }
+        
+        .reverse .tag.category {
+            background-color: #f85149;
+        }
+        
+        .scripting .tag.category {
+            background-color: #3fb950;
+        }
+        
+        .tool .tag.category {
+            background-color: #e36209;
+        }
+        
+        .tags {
+            margin: 10px 0;
+        }
+        
+        .difficulty {
+            font-size: 0.9rem;
+            color: var(--header-color);
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .filters {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-button {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .filter-button:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .filter-button.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px dashed var(--border-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tutorials</h1>
+        <div class="subtitle">Security tools and techniques explained</div>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="malware-analysis.html">Malware Analysis</a>
+            <a href="ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="lab-exercises.html">Lab Exercises</a>
+            <a href="tutorials.html">Tutorials</a>
+        </nav>
+    </header>
+    
+    <section>
+        <h2>Security Tutorials</h2>
+        <p>
+            Welcome to my collection of security tutorials. Here you'll find step-by-step guides on various 
+            security tools, techniques, and concepts. These tutorials aim to make complex security topics 
+            more approachable and practical.
+        </p>
+        
+        <div class="filters">
+            <button class="filter-button active" data-filter="all">All</button>
+            <button class="filter-button" data-filter="wireshark">Wireshark</button>
+            <button class="filter-button" data-filter="forensics">Forensics</button>
+            <button class="filter-button" data-filter="reverse">Reverse Engineering</button>
+            <button class="filter-button" data-filter="scripting">Scripting</button>
+            <button class="filter-button" data-filter="tool">Tool Guides</button>
+        </div>
+        
+        <div class="tutorial-grid">
+            <!-- 
+            Example tutorial card - you can uncomment and customize these as you add content
+            
+            <a href="../projects/wireshark-basics.html" class="tutorial-card wireshark">
+                <h3>Wireshark: The Basics</h3>
+                <div class="difficulty">Difficulty: Beginner</div>
+                <div class="tags">
+                    <span class="tag">Tutorial</span>
+                    <span class="tag category">Wireshark</span>
+                </div>
+                <p>A beginner's guide to network traffic analysis with Wireshark, from installation to capturing your first packets.</p>
+            </a>
+            -->
+            
+            <!-- Add your first tutorial here -->
+            <div class="empty-state">
+                <h3>Ready for your tutorials!</h3>
+                <p>Create your first tutorial using the template in projects/tutorial-template.html</p>
+                <p>Then add a card here to link to it.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 no-sudo-for-you | <a href="https://github.com/no-sudo-for-you" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
+    </footer>
+
+    <script>
+        // Simple filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const cards = document.querySelectorAll('.tutorial-card');
+            const emptyState = document.querySelector('.empty-state');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // If there are actual cards (not just the empty state)
+                    if (cards.length > 0 && !cards[0].classList.contains('empty-state')) {
+                        // Hide empty state
+                        if (emptyState) emptyState.style.display = 'none';
+                        
+                        // Show/hide cards based on filter
+                        cards.forEach(card => {
+                            if (filter === 'all' || card.classList.contains(filter)) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

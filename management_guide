@@ -1,0 +1,248 @@
+# Security Blog Management Guide
+
+This guide outlines the complete process for updating and managing your security blog, including creating new content, updating templates, managing indexes, and linking images.
+
+## Directory Structure
+
+```
+no-sudo-for-you.github.io/
+├── index.html                   (Main homepage)
+├── projects/                    (Individual project files)
+│   ├── template.html            (General project template)
+│   ├── ctf-template.html        (CTF template)
+│   ├── malware-template.html    (Malware analysis template)
+│   └── [your-projects].html     (Your actual content)
+├── categories/                  (Category index pages)
+│   ├── ctf-walkthroughs.html    (CTF index)
+│   ├── malware-analysis.html    (Malware analysis index)
+│   ├── lab-exercises.html       (Lab exercises index)
+│   └── tutorials.html           (Tutorials index)
+└── images/                      (Images directory)
+    └── [your-images].png        (Screenshots, diagrams, etc.)
+```
+
+## Creating New Content
+
+### Step 1: Create a New Project File
+
+1. Choose the appropriate template based on content type:
+   - General: `projects/template.html`
+   - CTF: `projects/ctf-template.html`
+   - Malware: `projects/malware-template.html`
+
+2. Copy the template to a new file with a descriptive name:
+   - Format: `projects/[category]-[name].html`
+   - Example: `projects/ctf-hackthebox-precious.html`
+
+3. Edit the new file:
+   - Update the title tag: `<title>no-sudo-for-you's Security Lab | [Your Title]</title>`
+   - Update the main heading: `<h1>[Your Project Title]</h1>`
+   - Replace all placeholder content marked with `[brackets]`
+   - Add your actual content, including code samples, steps, findings, etc.
+
+### Step 2: Add Images
+
+1. Prepare your images:
+   - Use descriptive filenames: `ctf-hackthebox-nmap-scan.png`
+   - Optimize images for web (compress if needed)
+
+2. Save images to the images directory:
+   - Use subdirectories if needed: `images/ctf/` or `images/malware/`
+
+3. Link images in your project file:
+   - For images in root image directory: `<img src="../images/your-image.png" alt="Description">`
+   - For images in subdirectory: `<img src="../images/ctf/your-image.png" alt="Description">`
+
+4. Add appropriate alt text for accessibility
+
+### Step 3: Update the Category Index
+
+1. Open the appropriate category index file:
+   - CTF: `categories/ctf-walkthroughs.html`
+   - Malware: `categories/malware-analysis.html`
+   - Lab Exercises: `categories/lab-exercises.html`
+   - Tutorials: `categories/tutorials.html`
+
+2. Remove the "empty-state" div if this is your first entry
+
+3. Add a new card for your project:
+
+```html
+<!-- For CTF walkthroughs -->
+<a href="../projects/ctf-hackthebox-precious.html" class="ctf-card web">
+    <h3>HackTheBox: Precious</h3>
+    <div class="platform">Platform: HackTheBox</div>
+    <div class="difficulty">Difficulty: Easy</div>
+    <div class="tags">
+        <span class="tag">CTF</span>
+        <span class="tag category">Web</span>
+    </div>
+    <p>Brief description of your walkthrough (1-2 sentences)</p>
+</a>
+```
+
+4. Apply the appropriate class to your card for filtering:
+   - CTF categories: `web`, `crypto`, `forensics`, `pwn`, `reverse`, `encode`, `stego`, `network`, `osint`, `llm`, `misc`
+   - Malware categories: `ransomware`, `trojan`, `banking`, `rootkit`, `adware`, `botnet`
+   - Lab categories: `pentest`, `exploit`, `linux`, `windows`, `cloud`
+   - Tutorial categories: `wireshark`, `forensics`, `reverse`, `scripting`, `tool`
+
+### Step 4: Update Main Homepage (Optional)
+
+If you want to feature your new project on the main page:
+
+1. Open `index.html` 
+
+2. Add a project card to the project grid:
+
+```html
+<div class="project-grid">
+    <a href="projects/ctf-hackthebox-precious.html" class="project-card ctf">
+        <h3>HackTheBox: Precious</h3>
+        <div class="tags">
+            <span class="tag">CTF</span>
+            <span class="tag">Web Exploitation</span>
+        </div>
+        <p>Step-by-step walkthrough of the Precious machine from HackTheBox, including initial foothold and privilege escalation.</p>
+    </a>
+</div>
+```
+
+## Modifying Templates
+
+If you want to create a new template or modify existing ones:
+
+1. Start with an existing template that's closest to what you need
+2. Save it with a new name in the `projects/` directory
+3. Modify the HTML and CSS as needed
+4. Update any category-specific classes or formatting
+
+Common template components to customize:
+- Header section with meta info
+- Content sections and structure
+- Styling for specific elements (code blocks, images, etc.)
+- Tag colors and categories
+- Footer information
+
+## Cross-Linking Between Projects
+
+To create a connected experience:
+
+1. Add navigation buttons between related projects:
+
+```html
+<div class="navigation-buttons">
+    <a href="previous-project.html">&larr; Previous: Previous Project</a>
+    <a href="next-project.html">Next: Next Project &rarr;</a>
+</div>
+```
+
+2. Add "Related Projects" sections where appropriate:
+
+```html
+<section>
+    <h2>Related Projects</h2>
+    <ul>
+        <li><a href="related-project1.html">Related Project 1</a></li>
+        <li><a href="related-project2.html">Related Project 2</a></li>
+    </ul>
+</section>
+```
+
+## Managing Images
+
+Best practices for image management:
+
+1. **Organization:**
+   - Group by category: `images/ctf/`, `images/malware/`, etc.
+   - Further group by project: `images/ctf/hackthebox-precious/`
+
+2. **Naming:**
+   - Use descriptive names: `nmap-scan-results.png`
+   - Include numbers for sequence: `step1-initial-access.png`
+
+3. **Optimization:**
+   - Keep file sizes reasonable (compress when needed)
+   - Use appropriate formats (PNG for screenshots, JPG for photos)
+
+4. **Linking in HTML:**
+   - Always use relative paths
+   - Always include alt text
+
+Example image HTML with proper structure:
+```html
+<figure>
+    <img src="../images/ctf/hackthebox-precious/nmap-scan.png" alt="Nmap scan results showing open ports 22 and 80">
+    <figcaption>Figure 1: Initial Nmap scan revealing SSH and HTTP services</figcaption>
+</figure>
+```
+
+## Testing Your Changes
+
+1. **Local Testing:**
+   - Use Python's built-in HTTP server:
+   ```
+   cd no-sudo-for-you.github.io
+   python -m http.server
+   ```
+   - Visit `http://localhost:8000` in your browser
+
+2. **GitHub Pages Deployment:**
+   - Commit and push changes
+   - GitHub will automatically update your site
+   - Check `https://no-sudo-for-you.github.io/`
+
+## Category-Specific Guidelines
+
+### CTF Walkthroughs
+
+- Include clear steps labeled with the step counter design
+- Always include the final flag (in the flag-box style)
+- Document your thought process, not just the solution
+- Tag appropriately based on challenge type
+
+### Malware Analysis
+
+- Always include sample information (hashes, file details)
+- Use the timeline feature for infection chain 
+- Document IOCs in the dedicated IOC section
+- Include both static and dynamic analysis when possible
+
+### Lab Exercises
+
+- Clearly state prerequisites and environment setup
+- Include both the goal and what was learned
+- Document any tools or special configurations used
+- Add diagrams where appropriate to illustrate structure
+
+### Tutorials
+
+- Start with intended audience and prerequisites
+- Break complex processes into clear steps
+- Include both examples of correct and incorrect approaches
+- Consider adding a "common issues" section
+
+## Maintenance Tips
+
+1. **Regular Updates:**
+   - Keep copyright years current
+   - Update any information that changes
+
+2. **Backup:**
+   - GitHub already provides version control
+   - Consider local backups of your content
+
+3. **Performance:**
+   - Periodically check page load times
+   - Optimize large images
+
+4. **Categorization:**
+   - Review category structures as content grows
+   - Add new categories as needed
+
+5. **Consistency:**
+   - Maintain consistent formatting across projects
+   - Use the same structure for similar content types
+
+---
+© 2025 no-sudo-for-you

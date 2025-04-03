@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Security Interface</title>
+    <style>
+        body {
+            background-color: #0055aa;
+            color: white;
+            font-family: 'Courier New', monospace;
+            padding: 30px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .terminal {
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .denied {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+        }
+        
+        .message-container {
+            overflow: hidden;
+        }
+        
+        .magic-word {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .nedry-gif {
+            margin: 30px auto;
+            display: block;
+            border: 2px solid white;
+        }
+        
+        .back-link {
+            margin-top: 40px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <h1>SYSTEM SECURITY INTERFACE</h1>
+        <div class="denied">access: PERMISSION DENIED....</div>
+        <div class="denied">...and...</div>
+        
+        <div class="message-container" id="messageContainer">
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+            <div class="magic-word">YOU DIDN'T SAY THE MAGIC WORD!</div>
+        </div>
+        
+        <img src="/api/placeholder/300/200" alt="Ah ah ah!" class="nedry-gif" onerror="this.style.display='none'">
+        
+        <script>
+            // Generate many "YOU DIDN'T SAY THE MAGIC WORD!" messages
+            const container = document.getElementById('messageContainer');
+            for (let i = 0; i < 50; i++) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'magic-word';
+                messageDiv.textContent = 'YOU DIDN\'T SAY THE MAGIC WORD!';
+                container.appendChild(messageDiv);
+            }
+        </script>
+        
+        <a href="index.html" class="back-link">← Return to safety</a>
+    </div>
+</body>
+</html>
