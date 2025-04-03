@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nscherger's Security Lab | CTF Walkthrough</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --code-bg: #1e2329;
+            --inline-code-bg: #2d3139;
+            --success-color: #2ea043;
+            --warning-color: #d29922;
+            --error-color: #f85149;
+            --hover-color: #21262d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+        }
+        
+        .meta-info {
+            color: var(--header-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tags {
+            margin: 15px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #1f6feb;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .ctf .tag {
+            background-color: #2ea043;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        
+        p code, li code {
+            background-color: var(--inline-code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--border-color);
+            padding-left: 15px;
+            margin-left: 0;
+            color: var(--header-color);
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--card-bg);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background-color: rgba(210, 153, 34, 0.2);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .info-box {
+            background-color: rgba(88, 166, 255, 0.2);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .success-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .flag-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border: 2px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .ctf-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .ctf-detail-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .ctf-detail-card h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--header-color);
+            font-size: 1rem;
+        }
+        
+        .ctf-detail-card p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .step-counter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+            font-size: 0.9rem;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+        </nav>
+        <h1>[CTF Name]: [Challenge Name]</h1>
+        <div class="meta-info">
+            Published: [Date] | Platform: [Platform Name] | Difficulty: [Easy/Medium/Hard]
+        </div>
+        <div class="tags ctf">
+            <span class="tag">CTF</span>
+            <span class="tag">[Category: Web/Crypto/Pwn/etc]</span>
+            <span class="tag">[Tool/Technique]</span>
+        </div>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Challenge Overview</h2>
+            <p>
+                [Brief description of the challenge, including the scenario/prompt given to you]
+            </p>
+            
+            <div class="ctf-details">
+                <div class="ctf-detail-card">
+                    <h4>Platform</h4>
+                    <p>[Platform Name]</p>
+                </div>
+                <div class="ctf-detail-card">
+                    <h4>Category</h4>
+                    <p>[Category]</p>
+                </div>
+                <div class="ctf-detail-card">
+                    <h4>Difficulty</h4>
+                    <p>[Easy/Medium/Hard]</p>
+                </div>
+                <div class="ctf-detail-card">
+                    <h4>Points</h4>
+                    <p>[Point value]</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>Challenge Description:</strong> [Copy the exact challenge description here]
+            </div>
+        </section>
+        
+        <section>
+            <h2>Reconnaissance</h2>
+            <p>
+                [Describe your initial investigation of the challenge. What information were you given? What did you discover?]
+            </p>
+            
+            <!-- Example of an image placeholder - replace with your actual screenshots -->
+            <img src="../images/ctf-screenshot1.png" alt="Initial reconnaissance" onerror="this.src='/api/placeholder/800/450'; this.alt='Screenshot placeholder'">
+            
+            <p>
+                [Continue with your initial observations and findings]
+            </p>
+            
+            <!-- Example of a terminal/command output -->
+            <pre><code>$ nmap -sV -p- 10.10.10.x
+Starting Nmap 7.92 ( https://nmap.org ) at 2025-04-03 15:30 EDT
+Nmap scan report for target-machine (10.10.10.x)
+Host is up (0.075s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</code></pre>
+        </section>
+        
+        <section>
+            <h2><span class="step-counter">1</span>Initial Foothold</h2>
+            <p>
+                [Describe how you gained initial access or started solving the challenge]
+            </p>
+            
+            <h3>Exploiting [Vulnerability/Technique]</h3>
+            <p>
+                [Detailed explanation of your approach]
+            </p>
+            
+            <!-- Example code block for exploit/technique -->
+            <pre><code>#!/usr/bin/python3
+import requests
+
+url = "http://target-machine/vulnerable-endpoint"
+payload = {"param": "' OR 1=1--"}
+
+response = requests.post(url, data=payload)
+print(response.text)</code></pre>
+            
+            <p>
+                [Explain the results of your exploit/technique]
+            </p>
+            
+            <div class="success-box">
+                <strong>Success:</strong> [Describe what you achieved in this step]
+            </div>
+        </section>
+        
+        <section>
+            <h2><span class="step-counter">2</span>Deeper Investigation</h2>
+            <p>
+                [Describe your next steps after the initial foothold]
+            </p>
+            
+            <img src="../images/ctf-screenshot2.png" alt="Investigation evidence" onerror="this.src='/api/placeholder/800/450'; this.alt='Screenshot placeholder'">
+            
+            <p>
+                [Continue with detailed explanations, showing your thought process]
+            </p>
+            
+            <!-- Warning box example -->
+            <div class="warning-box">
+                <strong>Challenge:</strong> [Describe a particularly tricky part or a roadblock you encountered]
+            </div>
+            
+            <h3>Bypassing [Security Measure]</h3>
+            <p>
+                [Explain how you overcame this challenge]
+            </p>
+        </section>
+        
+        <section>
+            <h2><span class="step-counter">3</span>Finding the Flag</h2>
+            <p>
+                [Describe the final steps that led to capturing the flag]
+            </p>
+            
+            <pre><code>[Final command/code/exploit that revealed the flag]</code></pre>
+            
+            <p>
+                [Describe what happened when you executed the final step]
+            </p>
+            
+            <div class="flag-box">
+                FLAG: flag{example_ctf_flag_format_replace_with_actual}
+            </div>
+        </section>
+        
+        <section>
+            <h2>Key Takeaways</h2>
+            <ul>
+                <li>[Important lesson or technique you learned]</li>
+                <li>[Security principle demonstrated by this challenge]</li>
+                <li>[Tool or approach that was particularly useful]</li>
+                <li>[Any other insights worth sharing]</li>
+            </ul>
+        </section>
+        
+        <!-- Navigation buttons - update these links as you create more content -->
+        <div class="navigation-buttons">
+            <a href="../index.html">&larr; Back to Home</a>
+            <a href="../categories/ctf-walkthroughs.html">More CTF Walkthroughs</a>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 nscherger | <a href="https://github.com/nscherger" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
+        <p>
+            If you found this walkthrough helpful, consider sharing it or providing feedback through 
+            <a href="https://github.com/nscherger/nscherger.github.io/issues" target="_blank">GitHub issues</a>.
+        </p>
+    </footer>
+</body>
+</html>

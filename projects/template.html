@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nscherger's Security Lab | Project Template</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --code-bg: #1e2329;
+            --inline-code-bg: #2d3139;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+        }
+        
+        .meta-info {
+            color: var(--header-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tags {
+            margin: 15px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #1f6feb;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .malware-analysis .tag {
+            background-color: #7e57c2;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        
+        p code, li code {
+            background-color: var(--inline-code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--border-color);
+            padding-left: 15px;
+            margin-left: 0;
+            color: var(--header-color);
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--card-bg);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background-color: rgba(187, 128, 9, 0.2);
+            border-left: 4px solid #bb8009;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .info-box {
+            background-color: rgba(88, 166, 255, 0.2);
+            border-left: 4px solid #58a6ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+            font-size: 0.9rem;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../categories/malware-analysis.html">Malware Analysis</a>
+            <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="../categories/lab-exercises.html">Lab Exercises</a>
+            <a href="../categories/tutorials.html">Tutorials</a>
+        </nav>
+        <h1>Project Title</h1>
+        <div class="meta-info">
+            Published: [Date] | Last Updated: [Date]
+        </div>
+        <div class="tags">
+            <span class="tag">Category</span>
+            <span class="tag">Tool/Platform</span>
+            <!-- Add additional tags as needed -->
+        </div>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>
+                [Introduce your project, analysis, or walkthrough here. Explain what you're doing and why it's interesting or valuable.]
+            </p>
+            
+            <!-- You can use notification boxes like this: -->
+            <div class="info-box">
+                <strong>Note:</strong> This is an example of an info box that can highlight important information.
+            </div>
+        </section>
+        
+        <section>
+            <h2>Project Details</h2>
+            <!-- Use tables for structured information -->
+            <table>
+                <tr>
+                    <th>Detail</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Environment</td>
+                    <td>[Details about your setup]</td>
+                </tr>
+                <tr>
+                    <td>Tools Used</td>
+                    <td>[List relevant tools]</td>
+                </tr>
+                <tr>
+                    <td>Difficulty</td>
+                    <td>[Easy/Medium/Hard]</td>
+                </tr>
+                <tr>
+                    <td>Time Required</td>
+                    <td>[Estimated time]</td>
+                </tr>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Step 1: [First Major Step]</h2>
+            
+            <h3>[Sub-step or specific aspect]</h3>
+            <p>
+                [Detailed explanation with code examples, screenshots, or diagrams as needed]
+            </p>
+            
+            <!-- Example of an image placeholder - replace with your actual images -->
+            <img src="/api/placeholder/800/450" alt="Description of image">
+            
+            <!-- Example of a code block -->
+            <pre><code>
+# Example code block
+def example_function():
+    print("Replace with your actual code")
+            </code></pre>
+            
+            <p>
+                [Continue with detailed explanations, findings, or observations]
+            </p>
+        </section>
+        
+        <section>
+            <h2>Step 2: [Second Major Step]</h2>
+            <p>
+                [Continue documenting your process step by step]
+            </p>
+            
+            <!-- Example of a warning box -->
+            <div class="warning-box">
+                <strong>Warning:</strong> This is an example of a warning box for important cautions.
+            </div>
+        </section>
+        
+        <!-- Add as many sections as needed for your content -->
+        <section>
+            <h2>Findings</h2>
+            <p>[Summary of what you discovered or accomplished]</p>
+        </section>
+        
+        <section>
+            <h2>Conclusion</h2>
+            <p>[Your final thoughts, lessons learned, or recommendations]</p>
+        </section>
+        
+        <!-- Navigation buttons - update these links as you create more content -->
+        <div class="navigation-buttons">
+            <a href="../index.html">&larr; Back to Home</a>
+            <!-- <a href="other-project.html">Next Project &rarr;</a> -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 nscherger | <a href="https://github.com/nscherger" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
+        <p>
+            If you found this content helpful, consider sharing it or providing feedback through 
+            <a href="https://github.com/nscherger/nscherger.github.io/issues" target="_blank">GitHub issues</a>.
+        </p>
+    </footer>
+</body>
+</html>

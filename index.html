@@ -1,7 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nscherger's Security Lab | Home</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --hover-color: #21262d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: var(--header-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: var(--accent-color);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--hover-color);
+        }
+        
+        .project-card h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #1f6feb;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .malware-analysis .tag {
+            background-color: #7e57c2;
+        }
+        
+        .ctf .tag {
+            background-color: #2ea043;
+        }
+        
+        .lab .tag {
+            background-color: #e36209;
+        }
+        
+        .tutorial .tag {
+            background-color: #d29922;
+        }
+        
+        .tags {
+            margin: 10px 0;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+        }
+        
+        .section-title {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        .about-section {
+            margin: 30px 0;
+        }
+    </style>
+</head>
 <body>
-	<h1>Hello World</h1>
-	<p>I'm hosted with Github Pages.</p>
+    <header>
+        <h1>nscherger's Security Lab</h1>
+        <div class="subtitle">Exploring Cybersecurity Through Practice</div>
+        <div class="social-links">
+            <a href="https://github.com/nscherger" target="_blank">GitHub</a>
+            <!-- <a href="#" target="_blank">Twitter</a> -->
+            <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a>
+        </div>
+    </header>
+    
+    <section class="about-section">
+        <h2>About</h2>
+        <p>
+            Welcome to my security lab blog! This is where I document my journey through various cybersecurity challenges,
+            malware analysis exercises, CTF competitions, and lab walkthroughs. My goal is to share knowledge and
+            techniques while creating a portfolio of my work.
+        </p>
+    </section>
+    
+    <section>
+        <h2 class="section-title">Recent Projects</h2>
+        <div class="project-grid">
+            <!-- 
+            Example project card - uncomment and customize these as you create projects
+            
+            <a href="projects/your-project-name.html" class="project-card malware-analysis">
+                <h3>Project Title</h3>
+                <div class="tags">
+                    <span class="tag">Category</span>
+                    <span class="tag">Tool/Platform</span>
+                </div>
+                <p>Brief description of your project and what it demonstrates.</p>
+            </a>
+            -->
+            
+            <!-- Add your actual projects here as you create them -->
+        </div>
+    </section>
+    
+    <section>
+        <h2 class="section-title">Categories</h2>
+        <ul>
+            <li><a href="categories/malware-analysis.html">Malware Analysis</a></li>
+            <li><a href="categories/ctf-walkthroughs.html">CTF Walkthroughs</a></li>
+            <li><a href="#">Lab Exercises</a></li>
+            <li><a href="#">Tutorials</a></li>
+        </ul>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 nscherger | Built with ♥ for the security community</p>
+    </footer>
 </body>
 </html>
