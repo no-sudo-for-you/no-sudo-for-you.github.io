@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Es ist alles in Butter</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .osint .tag.category {
+            background-color: #8250df;
         }
         
         pre {
@@ -235,6 +235,17 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +253,115 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Es ist alles in Butter</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">OSINT</span>
+            <span class="tag">Geolocation</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Es ist alles in Butter (OSINT)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    OSINT (Open Source Intelligence)
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    Unknown
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Hard
                 </div>
             </div>
             
-            <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+            <img src="../images/ctf/dawgctf/butter-1.png" alt="Es ist alles in Butter Challenge Description">
+            
+            <p>
+                This challenge involves identifying a grocery store location in Berlin based on provided images. The title "Es ist alles in Butter" is a German phrase that roughly translates to "Everything is fine" or literally "Everything is in butter."
+            </p>
+            
+            <h3>Understanding the Challenge</h3>
+            
+            <p>
+                The challenge provides photos of a grocery store and asks for its name and location. Based on the German title and the images, it appears to be a grocery store in Berlin, Germany.
+            </p>
+            
+            <div class="image-grid">
+                <img src="../images/ctf/dawgctf/butter-2.png" alt="Store Interior Image">
+                <img src="../images/ctf/dawgctf/butter-3.png" alt="Store Exterior Image">
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Analyzing the Images</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                The first step was to carefully examine all the provided images for clues:
             </p>
+            
+            <ol>
+                <li>The interior shot shows typical grocery store aisles with German-language signage</li>
+                <li>The exterior shot shows a red sign with a logo, which appears to be a "Kaufland" grocery store</li>
+                <li>There are street views that can help identify the exact location in Berlin</li>
+            </ol>
+            
+            <div class="image-grid">
+                <img src="../images/ctf/dawgctf/butter-4.png" alt="Street View 1">
+                <img src="../images/ctf/dawgctf/butter-5.png" alt="Street View 2">
+            </div>
+            
+            <h3>Narrowing Down the Location</h3>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                After identifying the store as a Kaufland, I searched for all Kaufland locations in Berlin. I then systematically checked each location using Google Street View and satellite imagery to find a match with the provided images.
             </p>
+            
+            <img src="../images/ctf/dawgctf/butter-6.png" alt="Aerial View Search">
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                Key features I looked for in the images:
             </p>
+            <ul>
+                <li>The distinctive street layout visible in the aerial shots</li>
+                <li>The architectural style of the building</li>
+                <li>The surrounding businesses and landmarks</li>
+                <li>The position of the store entrance relative to the street</li>
+            </ul>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <h3>Finding the Exact Location</h3>
+            
+            <div class="image-grid">
+                <img src="../images/ctf/dawgctf/butter-7.png" alt="Building Identification">
+                <img src="../images/ctf/dawgctf/butter-8.png" alt="Map Location">
+            </div>
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                After comparing multiple Kaufland locations in Berlin, I was able to identify the specific store as Kaufland Berlin-Moabit, located in the Moabit district of Berlin.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/butter-9.png" alt="Final Submission">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{Kaufland Berlin-Moabit}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates the power of geolocation and visual analysis in OSINT investigations. By carefully examining architectural details, signage, and surrounding landmarks, it's possible to pinpoint specific locations even in large cities with multiple similar stores. The challenge also highlights the importance of understanding cultural and linguistic contexts in international investigations.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-magnusopus.html">&larr; Previous: Magnus Opus</a>
+            <a href="ctf-dawgctf-evanesco.html">Next: Evanesco &rarr;</a>
         </div>
     </main>
     

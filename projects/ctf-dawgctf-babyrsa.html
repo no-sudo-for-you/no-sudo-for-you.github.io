@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Baby RSA 2</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .crypto .tag.category {
+            background-color: #7e57c2;
         }
         
         pre {
@@ -235,6 +235,18 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
     </style>
 </head>
 <body>
@@ -242,75 +254,108 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Baby RSA 2</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">Crypto</span>
+            <span class="tag">RSA</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Baby RSA 2 (CRYPTO)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Cryptography
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    250
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Medium
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/baby-rsa-1.png" alt="Baby RSA 2 Challenge Description">
+            
+            <p>
+                This challenge involves a common vulnerability in RSA cryptography called the "Common Modulus Attack." Let's first understand what we were given.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/baby-rsa-2.png" alt="Baby RSA 2 Challenge Code">
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>The Vulnerability: Common Modulus Attack</strong><br>
+                The fundamental security issue here is sharing the same modulus (N) across multiple users with different key pairs. This is a well-known vulnerability in RSA implementations.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Why This Is Insecure</h3>
+            
+            <p>In RSA:</p>
+            <ol>
+                <li>The modulus N is the product of two large primes p and q</li>
+                <li>The security relies on keeping the factors p and q secret</li>
+                <li>The private key d is calculated as d = e^(-1) mod φ(N), where φ(N) = (p-1)(q-1)</li>
+            </ol>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                When you share N but give different users their own (e, d) pairs, you provide enough information to factor N. This is because:
             </p>
+            
+            <ul>
+                <li>For any key pair (e, d), we know that e·d ≡ 1 (mod φ(N))</li>
+                <li>This means e·d = k·φ(N) + 1 for some integer k</li>
+                <li>If we can determine k, we can calculate φ(N) = (e·d - 1)/k</li>
+                <li>From φ(N) and N, we can factor N and break the encryption</li>
+            </ul>
+            
+            <h3>The Attack Method</h3>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                I used this mathematical relationship to recover the private factors p and q:
             </p>
             
-            <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
-            </p>
+            <ol>
+                <li>First, I calculated e·d - 1 = 950636936352204...083788, which is a multiple of φ(N)</li>
+                <li>I estimated k ≈ e·d/N ≈ 7982, and tried values around this estimate</li>
+                <li>For k = 7983, I calculated φ(N) = (e·d - 1)/7983</li>
+                <li>From φ(N), I found p+q = N - φ(N) + 1</li>
+                <li>Then calculated (p-q)² = (p+q)² - 4N</li>
+                <li>Took the square root to find p-q</li>
+                <li>Solved for p and q using the system of equations:
+                    <ul>
+                        <li>p+q (already known)</li>
+                        <li>p-q (calculated)</li>
+                    </ul>
+                </li>
+                <li>With p and q, I computed the original private key for e=65537</li>
+                <li>Finally, I decrypted the message</li>
+            </ol>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
-            
-            <p>
-                Submitting the flag gave me my first points in the competition:
-            </p>
-            
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/baby-rsa-3.png" alt="Baby RSA 2 Solution">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{kn0w1ng_d_1s_kn0w1ng_f4ct0rs}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates why sharing the same RSA modulus among different users is dangerous. Even though each user has their own public-private key pair, knowing one private key allows an attacker to factor the modulus and break everyone's encryption.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-cantors.html">&larr; Previous: Cantor's Pairadox</a>
+            <a href="ctf-dawgctf-guessme.html">Next: Guess Me If You Can &rarr;</a>
         </div>
     </main>
     

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - ASK Me Again</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -235,6 +235,34 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +270,102 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - ASK Me Again</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
             <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag">Radio</span>
+            <span class="tag">Signal Processing</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>ASK Me Again (MISC)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Miscellaneous
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    200
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Hard
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/ask-me-1.png" alt="ASK Me Again Challenge Description">
+            
+            <p>
+                This challenge deals with signals and modulation techniques, specifically Amplitude-Shift Keying (ASK) as hinted by the title. The challenge provides a .wav file that needs to be analyzed to recover the hidden data.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/ask-me-2.png" alt="Challenge Download Link">
+            
+            <h3>Understanding ASK Modulation</h3>
+            
+            <p>
+                Amplitude-Shift Keying (ASK) is a form of amplitude modulation that represents digital data as variations in the amplitude of a carrier wave. In its simplest form, the presence of a carrier wave at a certain amplitude represents a binary "1", while its absence (or a lower amplitude) represents a binary "0".
+            </p>
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>ASK Modulation:</strong><br>
+                In ASK, the carrier signal's amplitude changes to represent different binary values. This is commonly used in short-range wireless communications and can be demodulated with relatively simple techniques.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Analyzing the Signal</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                To analyze the provided .wav file, I used GNU Radio Companion, a graphical tool for creating signal processing applications. I built a simple flowgraph to demodulate the ASK signal and extract the binary data.
             </p>
+            
+            <img src="../images/ctf/dawgctf/ask-me-3.png" alt="GNU Radio Flowgraph for ASK Demodulation">
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                The key components of the flowgraph included:
             </p>
+            
+            <ol>
+                <li>A file source to read the .wav file</li>
+                <li>A low-pass filter to remove noise</li>
+                <li>An AM demodulator to extract the amplitude variations</li>
+                <li>A threshold detector to convert the analog signal to digital (binary)</li>
+                <li>A Binary Slicer to clean up the digital signal</li>
+                <li>A file sink to save the demodulated bits</li>
+            </ol>
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                After running the flowgraph, I converted the resulting bit stream to ASCII characters to reveal the flag.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <div class="terminal-output">
+$ python3 decode_bits.py
+Decoded data: DawgCTF{D3M0DUL4710N_1S_FUN}
+            </div>
             
-            <p>
-                Submitting the flag gave me my first points in the competition:
-            </p>
-            
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/ask-me-4.png" alt="Flag Submission Success">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{D3M0DUL4710N_1S_FUN}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates basic concepts of digital signal processing and modulation techniques used in telecommunications. ASK is one of the simplest forms of digital modulation, but the principles extend to more complex modulation schemes like FSK (Frequency-Shift Keying) and PSK (Phase-Shift Keying).
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-spectral.html">&larr; Previous: Spectral Secrets</a>
+            <a href="ctf-dawgctf-lineinsand.html">Next: Line in the Sand &rarr;</a>
         </div>
     </main>
     

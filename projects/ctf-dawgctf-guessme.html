@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Guess Me If You Can</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .crypto .tag.category {
+            background-color: #7e57c2;
         }
         
         pre {
@@ -235,6 +235,34 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +270,124 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Guess Me If You Can</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">Crypto</span>
+            <span class="tag">PRNG</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Guess Me If You Can (CRYPTO)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Cryptography
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    300
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Hard
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/guess-me-1.png" alt="Guess Me If You Can Challenge Description">
+            
+            <p>
+                This challenge involves predicting the output of a Linear Congruential Generator (LCG), a type of pseudorandom number generator. The key to this challenge is understanding how LCGs work and how to exploit their deterministic nature.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/guess-me-2.png" alt="Guess Me If You Can Server Code">
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>Key Insights from the Server Code:</strong><br>
+                1. <strong>Admin account creation is important:</strong> The admin account is created first, with its password being the first output of the LCG after the initial seed.<br>
+                2. <strong>Possible alternating pattern:</strong> Some password transitions follow an a=3 prediction while others don't, suggesting there might be a pattern that alternates or changes in some way.<br>
+                3. <strong>Working backwards is key:</strong> If we can understand the pattern between consecutive passwords, we can work backwards from the first user password to the admin password.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Understanding Linear Congruential Generators (LCGs)</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                An LCG generates a sequence of pseudorandom numbers using the recurrence relation:
             </p>
+            
+            <pre><code>X_{n+1} = (a * X_n + b) % m</code></pre>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                Where:
             </p>
+            <ul>
+                <li>X is the sequence of pseudorandom values</li>
+                <li>a is the multiplier</li>
+                <li>b is the increment</li>
+                <li>m is the modulus</li>
+            </ul>
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                The challenge is to determine these parameters by observing the generated passwords, then use this knowledge to predict the admin password.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <h3>The Attack Strategy</h3>
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                I developed a script that:
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <ol>
+                <li>Registers 10 users to get a longer sequence of passwords</li>
+                <li>Analyzes the differences between consecutive passwords</li>
+                <li>Looks for consistent or alternating patterns in the sequence</li>
+                <li>Tries to identify the LCG parameters (a and b)</li>
+                <li>Generates admin password candidates based on different hypotheses</li>
+                <li>Tests each candidate by attempting to log in</li>
+            </ol>
+            
+            <img src="../images/ctf/dawgctf/guess-me-4.png" alt="Script Analysis of LCG">
+            
+            <div class="code-section">
+                <img src="../images/ctf/dawgctf/guess-me-5.png" alt="Python Exploit Script Part 1">
+                <img src="../images/ctf/dawgctf/guess-me-6.png" alt="Python Exploit Script Part 2">
+            </div>
+            
+            <p>
+                After analyzing the sequence of generated passwords, I was able to determine that the server was using an LCG with specific parameters. By understanding how the passwords were generated, I could predict the admin password and successfully log in.
+            </p>
+            
+            <div class="terminal-output">
+                [+] Registering multiple users to collect password samples...
+                [+] Analyzing password patterns...
+                [+] Testing different LCG parameters...
+                [+] Found likely admin password!
+                [+] Attempting login with candidate...
+                [+] Login successful!
+            </div>
+            
+            <img src="../images/ctf/dawgctf/guess-me-3.png" alt="Successful Login">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{PRNGs_d0nt_m4k3_f0r_g00d_p455w0rd5}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates why using predictable pseudorandom number generators for security-critical applications like password generation is dangerous. Once an attacker can determine the parameters of the PRNG, they can predict past and future outputs.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-babyrsa.html">&larr; Previous: Baby RSA 2</a>
+            <a href="ctf-dawgctf-4spam.html">Next: 4spam &rarr;</a>
         </div>
     </main>
     

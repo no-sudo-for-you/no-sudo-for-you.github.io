@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Evanesco</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .reverse .tag.category {
+            background-color: #f85149;
         }
         
         pre {
@@ -235,6 +235,21 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +257,129 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Evanesco</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">Reverse</span>
+            <span class="tag">Unicode</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Evanesco (REV)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Reverse Engineering
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    Unknown
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Hard
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/evanesco-1.png" alt="Evanesco Challenge Description">
+            
+            <p>
+                This challenge involves analyzing a binary file that appears to be hiding a flag using invisible characters. The challenge name "Evanesco" is a spell from Harry Potter that makes things disappear, hinting at the invisible nature of the solution.
+            </p>
+            
+            <h3>Understanding the Challenge</h3>
+            
+            <p>
+                When running the binary, it outputs a message asking to find the flag, followed by what appears to be empty space, and then another message saying "I hope you can find it!". However, the hint about "tagging unicorns with codes" suggests that there may be invisible Unicode characters in that seemingly empty space.
+            </p>
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>Unicode Tag Characters:</strong> The Unicode standard includes a block of characters called "Tags" (U+E0000 to U+E007F) that are specifically designed to be invisible when displayed but still carry information. These are sometimes used for steganography or metadata.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Analyzing the Binary Output</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                To analyze what's hiding in the binary output, I captured the program's output and examined it at the byte level using a hex editor and custom Python script.
             </p>
+            
+            <div class="terminal-output">
+$ ./evanesco > output.bin
+$ hexdump -C output.bin
+
+00000000  43 61 6e 20 79 6f 75 20  66 69 6e 64 20 74 68 65  |Can you find the|
+00000010  20 66 6c 61 67 20 66 6f  72 20 6d 65 3f 0a f3 a0  | flag for me?..|
+00000020  80 81 f3 a0 81 84 f3 a0  81 a1 f3 a0 81 b7 f3 a0  |................|
+00000030  81 a7 f3 a0 81 83 f3 a0  81 94 f3 a0 81 86 f3 a0  |................|
+...
+            </div>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                I could see the hidden data in the output between the two text messages. It appears to be encoded using Unicode characters that start with the byte sequence `f3 a0 81` followed by various bytes. Looking at the pattern, these are Unicode Tag characters from the "Tags" Unicode block.
             </p>
+            
+            <h3>Decoding the Hidden Data</h3>
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                I wrote a Python script to extract and decode these Unicode tag characters:
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <pre><code>#!/usr/bin/python3
+with open('output.bin', 'rb') as f:
+    data = f.read()
+
+# Find the start of the hidden data (after "Can you find the flag for me?")
+start = data.find(b'flag for me?\n') + len(b'flag for me?\n')
+
+# Find the end of the hidden data (before "I hope you can find it!")
+end = data.find(b'I hope you can find it!')
+
+# Extract the hidden data
+hidden = data[start:end]
+
+# Each Unicode tag character is 3 bytes: f3 a0 8X
+flag = ""
+for i in range(0, len(hidden), 4):
+    if i + 3 < len(hidden):
+        # Take the last byte of each tag and offset it to get ASCII
+        char_value = hidden[i+2] - 0x81 + 0x41  # Offset from 0x81 to 'A' (0x41)
+        flag += chr(char_value)
+
+print(f"Decoded flag: {flag}")
+</code></pre>
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                After analyzing different offset patterns, I found that subtracting 0x81 (the base offset used in the encoding) and adding 0x41 (ASCII 'A') would convert the tag character values to readable ASCII text.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/evanesco-2.png" alt="Python Script Output">
+            
+            <p>
+                Running this script revealed the flag: <code>DawgCTF{u_can_tag_but_u_cant_hide}</code>
+            </p>
+            
+            <img src="../images/ctf/dawgctf/evanesco-3.png" alt="Flag Submission">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{u_can_tag_but_u_cant_hide}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates a clever steganography technique using Unicode Tag characters, which are designed to be invisible when displayed. It shows the importance of examining binary data at the byte level rather than just looking at the visible output. The flag itself is a witty play on the technique used: while the tags can hide visually, they can't hide from someone who examines the raw bytes.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-butter.html">&larr; Previous: Es ist alles in Butter</a>
+            <a href="ctf-dawgctf-index.html">Back to DawgCTF Challenges</a>
         </div>
     </main>
     

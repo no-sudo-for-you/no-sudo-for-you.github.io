@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Line in the Sand</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .osint .tag.category {
+            background-color: #8250df;
         }
         
         pre {
@@ -235,6 +235,34 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +270,93 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Line in the Sand</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">OSINT</span>
+            <span class="tag">Geolocation</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Line in the Sand (OSINT)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    OSINT (Open Source Intelligence)
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    100
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Medium
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/line-in-sand-1.png" alt="Line in the Sand Challenge Description">
+            
+            <p>
+                This challenge involves using the what3words geolocation system to identify a specific location. The challenge provides a what3words address: <code>wire.asset.comic</code>.
+            </p>
+            
+            <h3>Understanding what3words</h3>
+            
+            <p>
+                what3words is a geocoding system that has divided the world into 3m x 3m squares, each with a unique 3-word address. It's designed to be more memorable and easier to share than traditional coordinates. The system can be particularly useful for indicating precise locations in areas without formal addressing systems.
+            </p>
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>what3words System:</strong><br>
+                Unlike traditional coordinates, what3words uses three random words to identify a precise 3m x 3m location anywhere on Earth. For example, "table.chair.lamp" might correspond to a specific spot in Central Park.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Finding the Location</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                I first accessed the what3words website and entered the provided address: <code>wire.asset.comic</code>
             </p>
+            
+            <pre><code>https://what3words.com/wire.asset.comic</code></pre>
+            
+            <img src="../images/ctf/dawgctf/line-in-sand-2.png" alt="what3words Map Location">
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                The what3words address led me to a specific location in San Antonio, Texas. Looking at the satellite view, I could see that this was on a military installation. By checking the surrounding area and landmarks, I was able to identify this as Fort Sam Houston.
             </p>
+            
+            <img src="../images/ctf/dawgctf/line-in-sand-3.png" alt="Closer View of the Location">
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                Using Google Maps to confirm the location, I verified that the what3words address corresponded to a spot within Fort Sam Houston in San Antonio, Texas.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <img src="../images/ctf/dawgctf/line-in-sand-4.png" alt="Google Maps Confirmation">
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                The challenge asked for the name of the military installation, so the flag would be Fort Sam Houston.
             </p>
-            
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{Fort_Sam_Houston}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates how modern geolocation tools like what3words can be used in OSINT investigations. The system provides a unique way to specify exact locations, which can be valuable for intelligence gathering, emergency services, and navigation in areas without conventional addresses.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-askme.html">&larr; Previous: ASK Me Again</a>
+            <a href="ctf-dawgctf-magnusopus.html">Next: Magnus Opus &rarr;</a>
         </div>
     </main>
     

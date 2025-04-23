@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Cantor's Pairadox</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .crypto .tag.category {
+            background-color: #7e57c2;
         }
         
         pre {
@@ -235,6 +235,18 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
     </style>
 </head>
 <body>
@@ -242,75 +254,88 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Cantor's Pairadox</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">Crypto</span>
+            <span class="tag">Math</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Cantor's Pairadox (CRYPTO)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Cryptography
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    200
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Medium
                 </div>
             </div>
             
-            <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+            <img src="../images/ctf/dawgctf/cantors-pairadox-1.png" alt="Cantor's Pairadox Challenge Description">
+            
+            <p>
+                This challenge involves understanding and reversing a mathematical pairing function based on Georg Cantor's work. Let's look at what we were given:
+            </p>
+            
+            <img src="../images/ctf/dawgctf/cantors-pairadox-2.png" alt="Cantor's Pairadox Encryption Code">
+            
+            <div class="solution-code">
+                <h3>Challenge Analysis</h3>
+                <ol>
+                    <li>The original code encrypted the flag by:
+                        <ul>
+                            <li>Converting the flag to ASCII values</li>
+                            <li>Padding the array to a power of 2 length</li>
+                            <li>Applying a special pairing function 6 times, which combined pairs of numbers using triangular numbers</li>
+                        </ul>
+                    </li>
+                    <li>To decrypt it, I needed to:
+                        <ul>
+                            <li>Implement the inverse of the pairing function (unpair)</li>
+                            <li>Apply this inverse function 6 times to the encoded value</li>
+                            <li>Convert the resulting ASCII values back to characters</li>
+                        </ul>
+                    </li>
+                </ol>
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
-            
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                The key to the decryption was understanding the mathematical "pairing function" used in the original code. This function maps pairs of non-negative integers to a single non-negative integer. To reverse it, I needed to compute the inverse function.
             </p>
             
-            <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
-            </p>
+            <img src="../images/ctf/dawgctf/cantors-pairadox-3.png" alt="Solution Code">
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                After implementing the inverse pairing function and applying it recursively to unwind the 6 rounds of encryption, I was able to recover the original ASCII values and convert them back to the flag.
             </p>
-            
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
-            
-            <p>
-                Submitting the flag gave me my first points in the competition:
-            </p>
-            
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: Dawg{1_pr3f3r_4ppl3s_t0_pa1rs_4nyw2y5}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrated how mathematical functions like Cantor's pairing function can be used in cryptography, and the importance of understanding how to reverse mathematical transformations to decrypt data.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-prosper.html">&larr; Previous: Look Long and Prosper</a>
+            <a href="ctf-dawgctf-babyrsa.html">Next: Baby RSA 2 &rarr;</a>
         </div>
     </main>
     

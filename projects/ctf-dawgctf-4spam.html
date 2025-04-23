@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - 4spam</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -91,8 +91,8 @@
             background-color: #2ea043;
         }
         
-        .misc .tag.category {
-            background-color: #6e7681;
+        .web .tag.category {
+            background-color: #1f6feb;
         }
         
         pre {
@@ -235,6 +235,34 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,84 +270,138 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - 4spam</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
-            <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag category">Web</span>
+            <span class="tag">Ghostscript</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>4spam (WEB)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Web
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    200
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Hard
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/4spam-1.png" alt="4spam Challenge Description">
+            
+            <p>
+                This challenge involves exploiting a vulnerability in Ghostscript, a popular interpreter for PostScript and PDF files. The challenge website apparently allows users to upload images along with messages to a message board.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/4spam-2.png" alt="4spam Challenge Interface">
+            
+            <h3>Identifying the Vulnerability</h3>
+            
+            <p>
+                After exploring the application, I noticed that when uploading files, the server was using Ghostscript to process them, likely to generate thumbnails or validate the uploads. Looking at the error messages, I identified a potential command injection vulnerability:
+            </p>
+            
+            <img src="../images/ctf/dawgctf/4spam-3.png" alt="Ghostscript Error Message">
+            
+            <p>
+                The command is attempting to use Ghostscript (gs) to convert a PostScript file to PDF, but there's an error that reveals what appears to be an attempted command injection exploit. The key suspicious part is in the OutputFile parameter, which contains a pipe command that tries to:
+            </p>
+            
+            <ol>
+                <li>Read /flag.txt</li>
+                <li>Redirect its contents to /var/www/html/uploads/flag.txt</li>
+            </ol>
+            
+            <p>
+                This suggests a PostScript/Ghostscript vulnerability that allows command execution. The error message reveals the attempted exploit by showing the command in the operand stack.
+            </p>
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>Vulnerability Details:</strong><br>
+                - Using GPL Ghostscript version 10.05.0 (dated 2025-03-12)<br>
+                - The exploit attempts to read a flag file and write it to a web-accessible location<br>
+                - The command injection is happening through the -sOutputFile parameter<br>
+                - This looks like a classic PostScript/Ghostscript sandbox escape exploit
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Crafting the Exploit</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                Based on the vulnerability, I crafted a PostScript file that would exploit the -dNOSAFER flag to execute a shell command:
             </p>
+            
+            <img src="../images/ctf/dawgctf/4spam-4.png" alt="PostScript Exploit Code">
+            
+            <pre><code>%!PS
+userdict /setpagedevice undef
+save
+legal
+{ null restore } stopped { pop } if
+{ legal } stopped { pop } if
+mark /OutputFile (%pipe%cat /flag.txt > /var/www/html/uploads/flag.txt) currentdevice putdeviceprops
+showpage</code></pre>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                This PostScript code exploits the -dNOSAFER flag to execute the shell command <code>cat /flag.txt > /var/www/html/uploads/flag.txt</code>, which will copy the flag to a file in the uploads directory.
             </p>
+            
+            <h3>Converting to PDF and Uploading</h3>
+            
+            <img src="../images/ctf/dawgctf/4spam-5.png" alt="Converting PostScript to PDF">
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                Next, I converted this PostScript file to PDF using Ghostscript itself:
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <pre><code>gs -sDEVICE=pdfwrite -o exploit.pdf exploit.ps</code></pre>
+            
+            <h3>Uploading the Exploit and Accessing the Flag</h3>
+            
+            <ol>
+                <li>I went to the 4spam webpage</li>
+                <li>Typed some text in the "Message" field (it's required)</li>
+                <li>Chose my exploit.pdf file using the "Image (optional, max 5 MB)" field</li>
+                <li>Clicked the "Post" button to submit</li>
+            </ol>
+            
+            <img src="../images/ctf/dawgctf/4spam-6.png" alt="Uploading the Exploit PDF">
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                After the upload was processed, the server executed my embedded command when it tried to process the PDF with Ghostscript. This created a file named flag.txt in the uploads directory.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/4spam-7.png" alt="Successfully Created File">
+            
+            <p>
+                Finally, I navigated to the uploaded flag file at <code>http://4spam.umbccd.net/uploads/flag.txt</code>:
+            </p>
+            
+            <img src="../images/ctf/dawgctf/4spam-8.png" alt="Flag File Contents">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{h4ck3d_by_0pay_expl01t}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates the dangers of processing user-supplied files with powerful tools like Ghostscript without proper sandboxing. The -dNOSAFER flag in particular allows for command execution, making it a critical vulnerability if exposed to user input.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
-        </div>
-    </main>
-    
-    <footer>
-        <p>&copy; 2025 no-sudo-for-you | <a href="https://github.com/no-sudo-for-you" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
-        <p>
-            If you found this walkthrough helpful, consider sharing it or providing feedback through 
-            <a href="https://github.com/no-sudo-for-you/no-sudo-for-you.github.io/issues" target="_blank">GitHub issues</a>.
-        </p>
-    </footer>
-</body>
-</html>
+            <a href="ctf-dawgctf-guessme.html">&larr; Previous: Guess Me If You Can</a>
+            <a href="ctf-dawgctf-spectral.html">Next: Spectral Secrets &rarr;

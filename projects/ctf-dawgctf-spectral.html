@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>no-sudo-for-you's Security Lab | DawgCTF - Discord Challenge</title>
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Spectral Secrets</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -235,6 +235,34 @@
             display: block;
             margin-bottom: 5px;
         }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .solution-code {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .terminal-output {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            color: #8BC34A; /* Terminal green text */
+            margin: 20px 0;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -242,75 +270,109 @@
         <nav>
             <a href="../index.html">Home</a>
             <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-index.html">DawgCTF Challenges</a>
         </nav>
-        <h1>DawgCTF 2025 - Discord Challenge</h1>
+        <h1>DawgCTF 2025 - Spectral Secrets</h1>
         <div class="meta-info">
             Published: April 22, 2025 | CTF: DawgCTF 2025
         </div>
         <div class="tags ctf">
             <span class="tag">CTF</span>
             <span class="tag category">Misc</span>
-            <span class="tag">Easy</span>
+            <span class="tag">Audio</span>
+            <span class="tag">Steganography</span>
         </div>
     </header>
     
     <main>
         <section class="challenge-card">
-            <h3>Discord Challenge (MISC)</h3>
+            <h3>Spectral Secrets (MISC)</h3>
             <div class="challenge-details">
                 <div class="challenge-detail">
                     <span>Category</span>
-                    Misc
+                    Miscellaneous
                 </div>
                 <div class="challenge-detail">
                     <span>Points</span>
-                    25
+                    Unknown
                 </div>
                 <div class="challenge-detail">
                     <span>Difficulty</span>
-                    Very Easy
+                    Medium
                 </div>
             </div>
             
+            <img src="../images/ctf/dawgctf/spectral-1.png" alt="Spectral Secrets Challenge Description">
+            
+            <p>
+                This challenge involved examining an audio file for hidden content. The name "Spectral Secrets" is a major hint that we should look at the spectrogram of the audio file.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/spectral-2.png" alt="Audio File Download Link">
+            
+            <h3>Understanding Spectrograms</h3>
+            
+            <p>
+                A spectrogram is a visual representation of the spectrum of frequencies of a signal as it varies with time. In audio steganography, text or images can be hidden by modifying specific frequencies in a way that's not audible but becomes visible when viewing the spectrogram.
+            </p>
+            
             <div class="info-box">
-                <strong>Challenge Description:</strong> Join our Discord and find the flag!
+                <strong>Sound File Analysis:</strong><br>
+                When investigating audio files in CTFs, it's always worth checking the spectrogram, as this is a common technique for hiding information that's not audible but can be seen when visualizing the frequency domain.
             </div>
             
-            <img src="../images/ctf/dawgctf/discord-challenge.png" alt="Discord Challenge Description">
+            <h3>Analyzing the Audio File</h3>
             
             <p>
-                This was the absolute first and most beginner-friendly challenge of the competition. Most often a challenge like this isn't really a challenge but a free flag and sanity check to make sure you're ready to participate. This one is incredibly easy, but I figured I would document it anyway.
+                To analyze the audio file, I used Audacity, a free, open-source audio software that can display spectrograms. After downloading the challenge file, I opened it in Audacity.
             </p>
             
             <p>
-                The challenge simply asks us to visit the competition's Discord server and find the flag that's waiting there.
+                In Audacity, I followed these steps to view the spectrogram:
             </p>
+            
+            <ol>
+                <li>Opened the audio file</li>
+                <li>Clicked on the track name dropdown</li>
+                <li>Selected "Spectrogram" view</li>
+                <li>Adjusted the spectrogram settings to get a clearer view</li>
+            </ol>
+            
+            <img src="../images/ctf/dawgctf/spectral-3.png" alt="Opening the Audio File in Audacity">
+            
+            <h3>Discovering the Hidden Flag</h3>
             
             <p>
-                After joining the event Discord server, I could see a very obvious flag channel. Once in the channel, I found they were using the same flag from 2021. Easy points!
+                After switching to the spectrogram view, I immediately noticed a pattern of text hidden in the frequency display. This text was not audible when playing the audio file, but clearly visible in the spectrogram.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-flag.png" alt="Discord Flag Channel">
+            <img src="../images/ctf/dawgctf/spectral-4.png" alt="Spectrogram View in Audacity">
             
             <p>
-                Submitting the flag gave me my first points in the competition:
+                In the spectrogram, I could clearly see the text: "DawgCTF{4ud4c17y_my_b310v3d}". This is a clever wordplay on Audacity, the tool commonly used to view spectrograms.
             </p>
             
-            <img src="../images/ctf/dawgctf/discord-submission.png" alt="Discord Challenge Submission">
+            <img src="../images/ctf/dawgctf/spectral-5.png" alt="Flag Visible in Spectrogram">
+            
+            <p>
+                Submitting this flag confirmed it was correct:
+            </p>
+            
+            <img src="../images/ctf/dawgctf/spectral-6.png" alt="Flag Submission Success">
             
             <div class="flag-box">
-                FLAG: DawgCTF{3nj0y_th3_c0mp3t1t10n!}
+                FLAG: DawgCTF{4ud4c17y_my_b310v3d}
             </div>
             
             <div class="success-box">
-                <strong>Lesson:</strong> Always check the obvious places first! Sometimes the easiest challenges are just meant to get you familiar with the competition environment.
+                <strong>Key Learning:</strong> This challenge demonstrates a common audio steganography technique - hiding information in the spectrogram of an audio file. It's a reminder to always check multiple aspects of files in CTFs, including metadata, hexdump, and for audio files, the spectrogram view.
             </div>
         </section>
         
         <!-- Navigation buttons -->
         <div class="navigation-buttons">
-            <a href="ctf-space-game-writeup.html">&larr; Previous: Space Game</a>
-            <a href="ctf-dawgctf-birds.html">Next: The Birds &rarr;</a>
+            <a href="ctf-dawgctf-4spam.html">&larr; Previous: 4spam</a>
+            <a href="ctf-dawgctf-askme.html">Next: ASK Me Again &rarr;</a>
         </div>
     </main>
     
