@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Look Long and Prosper</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --code-bg: #1e2329;
+            --inline-code-bg: #2d3139;
+            --success-color: #2ea043;
+            --warning-color: #d29922;
+            --error-color: #f85149;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+        }
+        
+        .meta-info {
+            color: var(--header-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tags {
+            margin: 15px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #2ea043;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .ctf .tag.category {
+            background-color: #2ea043;
+        }
+        
+        .misc .tag.category {
+            background-color: #6e7681;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        
+        p code, li code {
+            background-color: var(--inline-code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--border-color);
+            padding-left: 15px;
+            margin-left: 0;
+            color: var(--header-color);
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--card-bg);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background-color: rgba(210, 153, 34, 0.2);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .info-box {
+            background-color: rgba(88, 166, 255, 0.2);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .success-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .flag-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border: 2px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+            text-align: center;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+            font-size: 0.9rem;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .challenge-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .challenge-card h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        .challenge-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-detail {
+            font-size: 0.9rem;
+        }
+        
+        .challenge-detail span {
+            color: var(--header-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .step {
+            margin-bottom: 30px;
+        }
+        
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 767px) {
+            .code-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .highlight {
+            background-color: rgba(210, 153, 34, 0.2);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+        </nav>
+        <h1>DawgCTF 2022 - Look Long and Prosper</h1>
+        <div class="meta-info">
+            Published: April 22, 2025 | CTF: DawgCTF 2022
+        </div>
+        <div class="tags ctf">
+            <span class="tag">CTF</span>
+            <span class="tag category">Misc</span>
+            <span class="tag">Cryptography</span>
+        </div>
+    </header>
+    
+    <main>
+        <section class="challenge-card">
+            <h3>Look Long and Prosper (MISC)</h3>
+            <div class="challenge-details">
+                <div class="challenge-detail">
+                    <span>Category</span>
+                    Misc / Crypto
+                </div>
+                <div class="challenge-detail">
+                    <span>Points</span>
+                    Unknown
+                </div>
+                <div class="challenge-detail">
+                    <span>Difficulty</span>
+                    Medium
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>Challenge Description:</strong> In this challenge, you'll need to uncover a hidden secret, but first, you must find the key. The key is hidden in plain sight. A user named Wikikenobi has left you a breadcrumb trail, and it's your job to follow it.
+            </div>
+            
+            <img src="../images/ctf/dawgctf/prosper-challenge.png" alt="Look Long and Prosper Challenge Description">
+            
+            <p>
+                Looking at the challenge, we can see that we are trying to uncover the hidden secret in the encoded string they gave us: "aiye_hoav_aqd_advi". It also mentions that we need to first find a key to decode it, which points to a few possible cipher types, including Vigenère which is common in CTFs. 
+            </p>
+            
+            <p>
+                The challenge tells us a user named Wikikenobi has left us some clues to follow, so let's start our investigation there.
+            </p>
+            
+            <div class="step">
+                <h3>Step 1: Finding Wikikenobi</h3>
+                
+                <p>
+                    Googling the username "Wikikenobi" didn't yield much useful information, but based on the name we can assume it is somehow tied to Wikipedia. The "kenobi" part suggests a Star Wars reference, while the challenge title "Look Long and Prosper" references Star Trek (it's a play on "Live Long and Prosper").
+                </p>
+                
+                <img src="../images/ctf/dawgctf/wikikenobi-search.png" alt="Searching for Wikikenobi on Google">
+                
+                <p>
+                    When searching Wikipedia for "Wikikenobi", I found a user with exactly that name:
+                </p>
+                
+                <img src="../images/ctf/dawgctf/wikikenobi-user.png" alt="Wikikenobi's Wikipedia Profile">
+            </div>
+            
+            <div class="step">
+                <h3>Step 2: Finding Hidden Clues</h3>
+                
+                <p>
+                    Going to Wikikenobi's user page, I discovered they had made a single edit to the 2009 Star Trek film article. This connected nicely with our challenge title "Look Long and Prosper," which is a play on Spock's famous phrase "Live Long and Prosper."
+                </p>
+                
+                <p>
+                    Reading through the paragraph that Wikikenobi edited didn't immediately reveal anything unusual, as it appeared to be a legitimate edit to the Wikipedia page for the movie. However, the challenge title urged us to look closely at everything.
+                </p>
+                
+                <img src="../images/ctf/dawgctf/wiki-edit.png" alt="Wikikenobi's Edit on Wikipedia">
+                
+                <p>
+                    After carefully examining the edit, some names like Kirk and particularly Spock (due to the challenge name) stood out. I tried these as potential keys in decryption tools like CyberChef, but they didn't yield anything useful.
+                </p>
+                
+                <p>
+                    Looking deeper and through process of elimination, I decided to try taking the first letter of each sentence in the edited paragraph:
+                </p>
+                
+                <img src="../images/ctf/dawgctf/wiki-edit-highlighted.png" alt="Highlighted first letters in the paragraph">
+                
+                <blockquote>
+                    <span class="highlight">P</span>ioneering in its approach, the 2009 Star Trek film reinvents the franchise with a fresh, energetic cast and a thrilling plot... <span class="highlight">A</span>s young Kirk (Chris Pine) navigates his journey, he transforms from a reckless troublemaker into a capable captain... <span class="highlight">D</span>eeply engaging, the relationship between Kirk and Spock (Zachary Quinto) forms the heart of the film... <span class="highlight">A</span>s the villain Nero (Eric Bana) threatens the Federation, the crew bands together to stop him... <span class="highlight">W</span>ith stunning visuals and intense action, the film's space battles rival the best galactic showdowns... <span class="highlight">A</span>s the crew comes together, their unique skills combine to create a team as formidable as any rebel alliance... <span class="highlight">N</span>ever has Star Trek felt more exciting, as the characters grow and unite for a pulse-pounding adventure.
+                </blockquote>
+                
+                <p>
+                    Taking the first letter of each sentence gave me: <strong>PADAWAN</strong>
+                </p>
+                
+                <p>
+                    This seemed promising! "Padawan" is a term from Star Wars (fitting with the Kenobi reference), creating a clever cross-universe easter egg with the Star Trek theme. This was clearly a deliberate hint.
+                </p>
+            </div>
+            
+            <div class="step">
+                <h3>Step 3: Decoding the Message</h3>
+                
+                <p>
+                    Now that I had a potential key "PADAWAN" along with our initial encrypted flag value "aiye_hoav_aqd_advi", I headed to CyberChef to test it out. Based on the need for a key and the format of the encoded text, I suspected a Vigenère cipher.
+                </p>
+                
+                <img src="../images/ctf/dawgctf/cyberchef-vigenere.png" alt="CyberChef Vigenère Decode">
+                
+                <p>
+                    Setting up the CyberChef recipe with:
+                </p>
+                <ul>
+                    <li>Input: <code>aiye_hoav_aqd_advi</code></li>
+                    <li>Operation: Vigenère Decode</li>
+                    <li>Key: <code>PADAWAN</code></li>
+                </ul>
+                
+                <p>
+                    This gave me the output: <code>live_long_and_edit</code>
+                </p>
+                
+                <p>
+                    This result perfectly matched the theme of the challenge! "Live long and prosper" is the famous Star Trek quote, modified to "Live long and edit" as a reference to the Wikipedia edit that contained our key.
+                </p>
+                
+                <p>
+                    Submitting the flag gave me the points:
+                </p>
+                
+                <img src="../images/ctf/dawgctf/prosper-submission.png" alt="Successful flag submission">
+            </div>
+            
+            <div class="flag-box">
+                FLAG: DawgCTF{live_long_and_edit}
+            </div>
+            
+            <div class="success-box">
+                <strong>Key Takeaway:</strong> This challenge combined pop culture references from two different sci-fi universes (Star Wars and Star Trek) in a clever way. It also demonstrated the importance of examining seemingly ordinary text for hidden patterns, like taking the first letter of each sentence. Always consider the challenge title as a hint!
+            </div>
+        </section>
+        
+        <!-- Navigation buttons -->
+        <div class="navigation-buttons">
+            <a href="ctf-dawgctf-birds.html">&larr; Previous: The Birds</a>
+            <a href="../categories/ctf-walkthroughs.html">Back to CTF Walkthroughs</a>
+        </div>

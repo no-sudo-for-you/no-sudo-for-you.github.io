@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no-sudo-for-you's Security Lab | DawgCTF - Space Game</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --code-bg: #1e2329;
+            --inline-code-bg: #2d3139;
+            --success-color: #2ea043;
+            --warning-color: #d29922;
+            --error-color: #f85149;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+        }
+        
+        .meta-info {
+            color: var(--header-color);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tags {
+            margin: 15px 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #2ea043;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .ctf .tag.category {
+            background-color: #2ea043;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        
+        p code, li code {
+            background-color: var(--inline-code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--border-color);
+            padding-left: 15px;
+            margin-left: 0;
+            color: var(--header-color);
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--card-bg);
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background-color: rgba(210, 153, 34, 0.2);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .info-box {
+            background-color: rgba(88, 166, 255, 0.2);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .success-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        
+        .flag-box {
+            background-color: rgba(46, 160, 67, 0.2);
+            border: 2px solid var(--success-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+            text-align: center;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+            font-size: 0.9rem;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .challenge-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .challenge-card h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        .challenge-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .challenge-detail {
+            font-size: 0.9rem;
+        }
+        
+        .challenge-detail span {
+            color: var(--header-color);
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+        </nav>
+        <h1>DawgCTF 2022 - Space Game</h1>
+        <div class="meta-info">
+            Published: April 22, 2025 | CTF: DawgCTF 2022
+        </div>
+        <div class="tags ctf">
+            <span class="tag">CTF</span>
+            <span class="tag category">Web</span>
+            <span class="tag">Space Game</span>
+        </div>
+    </header>
+    
+    <main>
+        <section class="challenge-card">
+            <h3>Space Game 1 (WEB)</h3>
+            <div class="challenge-details">
+                <div class="challenge-detail">
+                    <span>Category</span>
+                    FWN (Forensics, Web, Network)
+                </div>
+                <div class="challenge-detail">
+                    <span>Points</span>
+                    250
+                </div>
+                <div class="challenge-detail">
+                    <span>Difficulty</span>
+                    Medium
+                </div>
+            </div>
+            <p>
+                This challenge was in the FWN category (forensics, web, network) and involved building a game client to access and play the game hosted on the server by the competition. They provided some documentation that gives a breakdown of the structure of the game and some message types that need to be used.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/space-game-description.png" alt="Space Game Challenge Description">
+            
+            <div class="info-box">
+                <strong>Challenge Description:</strong> The challenge provided documentation about game requirements and communication protocols needed to interact with the server.
+            </div>
+            
+            <img src="../images/ctf/dawgctf/space-game-protocol.png" alt="Space Game Protocol Documentation">
+            
+            <img src="../images/ctf/dawgctf/space-game-docs.png" alt="Space Game Server Documentation">
+            
+            <p>
+                The documentation included message types that needed to be used to properly communicate with the server and allow the game to properly run. This challenge was a bit difficult because my actual client I created with a UI kept having issues connecting to the server, so I had to make a simpler version that had no interaction but did let me collect log information on players and positions which ended up being all that was needed for the first challenge.
+            </p>
+            
+            <p>
+                Because my client didn't have a UI, I was unable to do part 2 as I had to move my player to a different sector to find another player, but my movement was not working properly. I tried to implement a teleport function to simply move my player to the sector and collect the data on players but this didn't end up working either so I had to call it at that point and move on. I think I missed a hint either on the challenge itself or in the documentation that stated player values were in the wrong endian format in the documentation.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/space-game-client.png" alt="Space Game Client Output with Flag">
+            
+            <p>
+                After connecting the client to the server, the logs start dumping and we can see a flag. This is the name of the other player that is in the starting quadrant and gives us the value of the flag for Space Game 1. This was a bit of luck because previous times when I connected, the entire flag value was not visible, possibly due to server issues. The server was having some trouble staying up, so connectivity was inconsistent.
+            </p>
+            
+            <p>
+                Since this looks like a complete flag, I took that value and submitted it.
+            </p>
+            
+            <img src="../images/ctf/dawgctf/space-game-1.png" alt="Space Game Flag Submission">
+            
+            <div class="flag-box">
+                FLAG: DawgCTF{FL4GS_1N_SP4444C3!!!!}
+            </div>
+        </section>
+        
+        <!-- Navigation buttons -->
+        <div class="navigation-buttons">
+            <a href="../categories/ctf-walkthroughs.html">&larr; Back to CTF Walkthroughs</a>
+            <a href="ctf-dawgctf-discord.html">Next: Discord Challenge &rarr;</a>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 no-sudo-for-you | <a href="https://github.com/no-sudo-for-you" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
+        <p>
+            If you found this walkthrough helpful, consider sharing it or providing feedback through 
+            <a href="https://github.com/no-sudo-for-you/no-sudo-for-you.github.io/issues" target="_blank">GitHub issues</a>.
+        </p>
+    </footer>
+</body>
+</html>

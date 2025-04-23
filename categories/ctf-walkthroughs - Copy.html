@@ -188,20 +188,12 @@
             color: white;
         }
         
-        .ctf-event {
+        .empty-state {
+            text-align: center;
+            padding: 50px;
             background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .ctf-event h3 {
-            margin-top: 0;
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border: 1px dashed var(--border-color);
         }
         
         footer {
@@ -248,55 +240,29 @@
             <button class="filter-button" data-filter="misc">Misc</button>
         </div>
         
-        <!-- DawgCTF 2025 Section -->
-        <div class="ctf-event">
-            <h3>DawgCTF 2025</h3>
-            <div class="ctf-grid">
-                <a href="../projects/ctf-space-game-writeup.html" class="ctf-card web">
-                    <h3>Space Game</h3>
-                    <div class="difficulty">Difficulty: Medium</div>
-                    <div class="tags">
-                        <span class="tag">CTF</span>
-                        <span class="tag category">Web</span>
-                    </div>
-                    <p>Building a game client to communicate with a server and extract player information to find a hidden flag.</p>
-                </a>
-                
-                <a href="../projects/ctf-dawgctf-discord.html" class="ctf-card misc">
-                    <h3>Discord Challenge</h3>
-                    <div class="difficulty">Difficulty: Very Easy</div>
-                    <div class="tags">
-                        <span class="tag">CTF</span>
-                        <span class="tag category">Misc</span>
-                    </div>
-                    <p>Finding a flag hidden in plain sight on the competition's Discord server.</p>
-                </a>
-                
-                <a href="../projects/ctf-dawgctf-birds.html" class="ctf-card crypto">
-                    <h3>The Birds</h3>
-                    <div class="difficulty">Difficulty: Easy</div>
-                    <div class="tags">
-                        <span class="tag">CTF</span>
-                        <span class="tag category">Crypto</span>
-                    </div>
-                    <p>Deciphering a message encoded with the "Birds on a Wire" cipher from a simple image.</p>
-                </a>
-                
-                <a href="../projects/ctf-dawgctf-prosper.html" class="ctf-card misc">
-                    <h3>Look Long and Prosper</h3>
-                    <div class="difficulty">Difficulty: Medium</div>
-                    <div class="tags">
-                        <span class="tag">CTF</span>
-                        <span class="tag category">Misc</span>
-                    </div>
-                    <p>Finding a hidden key in a Wikipedia edit to decrypt a Vigenère cipher with Star Trek and Star Wars references.</p>
-                </a>
+        <div class="ctf-grid">
+            <!-- 
+            Example CTF card - you can uncomment and customize these as you add content
+            
+            <a href="../projects/ctf-hackthebox-precious.html" class="ctf-card web">
+                <h3>HackTheBox: Precious</h3>
+                <div class="platform">Platform: HackTheBox</div>
+                <div class="difficulty">Difficulty: Easy</div>
+                <div class="tags">
+                    <span class="tag">CTF</span>
+                    <span class="tag category">Web</span>
+                </div>
+                <p>Exploiting a vulnerable PDF generator to gain system access and escalate privileges.</p>
+            </a>
+            -->
+            
+            <!-- Add your first CTF walkthrough here -->
+            <div class="empty-state">
+                <h3>Ready for your CTF walkthroughs!</h3>
+                <p>Create your first CTF writeup using the template in projects/ctf-template.html</p>
+                <p>Then add a card here to link to it.</p>
             </div>
-            <p><a href="../projects/ctf-dawgctf-index.html">View all DawgCTF 2025 challenges &rarr;</a></p>
         </div>
-        
-        <!-- Add your additional CTF events here -->
-        
     </section>
     
     <footer>
@@ -308,6 +274,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const filterButtons = document.querySelectorAll('.filter-button');
             const cards = document.querySelectorAll('.ctf-card');
+            const emptyState = document.querySelector('.empty-state');
             
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -319,14 +286,20 @@
                     
                     const filter = this.getAttribute('data-filter');
                     
-                    // Show/hide cards based on filter
-                    cards.forEach(card => {
-                        if (filter === 'all' || card.classList.contains(filter)) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
+                    // If there are actual cards (not just the empty state)
+                    if (cards.length > 0 && !cards[0].classList.contains('empty-state')) {
+                        // Hide empty state
+                        if (emptyState) emptyState.style.display = 'none';
+                        
+                        // Show/hide cards based on filter
+                        cards.forEach(card => {
+                            if (filter === 'all' || card.classList.contains(filter)) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    }
                 });
             });
         });

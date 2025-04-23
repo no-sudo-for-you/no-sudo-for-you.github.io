@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>no-sudo-for-you's Security Lab | DawgCTF Walkthroughs</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #8b949e;
+            --accent-color: #58a6ff;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --hover-color: #21262d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: var(--header-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        nav {
+            margin-bottom: 20px;
+        }
+        
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .ctf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .ctf-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .ctf-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--hover-color);
+        }
+        
+        .ctf-card h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #2ea043;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .web .tag.category {
+            background-color: #1f6feb;
+        }
+        
+        .crypto .tag.category {
+            background-color: #7e57c2;
+        }
+        
+        .misc .tag.category {
+            background-color: #6e7681;
+        }
+        
+        .tags {
+            margin: 10px 0;
+        }
+        
+        .difficulty {
+            font-size: 0.9rem;
+            color: var(--header-color);
+            margin-bottom: 10px;
+        }
+        
+        .platform {
+            font-size: 0.9rem;
+            color: var(--header-color);
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--header-color);
+        }
+        
+        .intro-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DawgCTF 2025 Walkthroughs</h1>
+        <div class="subtitle">Step-by-step solutions for DawgCTF 2025 challenges</div>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../categories/ctf-walkthroughs.html">CTF Walkthroughs</a>
+            <a href="../categories/malware-analysis.html">Malware Analysis</a>
+        </nav>
+    </header>
+    
+    <section class="intro-section">
+        <h2>About DawgCTF 2025</h2>
+        <p>
+            DawgCTF is an annual cybersecurity competition hosted by UMBC's CyberDawgs. The 2025 edition featured a variety of challenges across multiple categories including cryptography, web exploitation, reverse engineering, and more.
+        </p>
+        <p>
+            Below are detailed walkthroughs of the challenges I solved during the competition.
+        </p>
+    </section>
+    
+    <section>
+        <h2>Challenge Walkthroughs</h2>
+        
+        <div class="ctf-grid">
+            <a href="../projects/ctf-space-game-writeup.html" class="ctf-card web">
+                <h3>Space Game</h3>
+                <div class="platform">Platform: DawgCTF 2025</div>
+                <div class="difficulty">Difficulty: Medium</div>
+                <div class="tags">
+                    <span class="tag">CTF</span>
+                    <span class="tag category">Web</span>
+                </div>
+                <p>Building a game client to communicate with a server and extract player information to find a hidden flag.</p>
+            </a>
+            
+            <a href="../projects/ctf-dawgctf-discord.html" class="ctf-card misc">
+                <h3>Discord Challenge</h3>
+                <div class="platform">Platform: DawgCTF 2025</div>
+                <div class="difficulty">Difficulty: Very Easy</div>
+                <div class="tags">
+                    <span class="tag">CTF</span>
+                    <span class="tag category">Misc</span>
+                </div>
+                <p>Finding a flag hidden in plain sight on the competition's Discord server.</p>
+            </a>
+            
+            <a href="../projects/ctf-dawgctf-birds.html" class="ctf-card crypto">
+                <h3>The Birds</h3>
+                <div class="platform">Platform: DawgCTF 2025</div>
+                <div class="difficulty">Difficulty: Easy</div>
+                <div class="tags">
+                    <span class="tag">CTF</span>
+                    <span class="tag category">Crypto</span>
+                </div>
+                <p>Deciphering a message encoded with the "Birds on a Wire" cipher from a simple image.</p>
+            </a>
+            
+            <a href="../projects/ctf-dawgctf-prosper.html" class="ctf-card misc">
+                <h3>Look Long and Prosper</h3>
+                <div class="platform">Platform: DawgCTF 2025</div>
+                <div class="difficulty">Difficulty: Medium</div>
+                <div class="tags">
+                    <span class="tag">CTF</span>
+                    <span class="tag category">Misc</span>
+                </div>
+                <p>Finding a hidden key in a Wikipedia edit to decrypt a Vigenère cipher with Star Trek and Star Wars references.</p>
+            </a>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 no-sudo-for-you | <a href="https://github.com/no-sudo-for-you" target="_blank">GitHub</a> | <a href="https://www.linkedin.com/in/nathaniel-scherger/" target="_blank">LinkedIn</a></p>
+    </footer>
+</body>
+</html>
