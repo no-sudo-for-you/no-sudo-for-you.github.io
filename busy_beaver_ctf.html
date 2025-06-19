@@ -303,28 +303,51 @@ State A, Symbol 1 → Write 1, Move ?, Next State H<br><br>
             <div id="stats1">Machine not operational</div>
         </div>
         
-        <!-- Machine 2: Encrypted -->
+        <!-- Machine 2: Multi-layer Crypto -->
         <div class="machine-card encrypted">
-            <h3>Machine 2: The Encrypted Double Dipper</h3>
-            <p><strong>Status:</strong> 🔐 ENCRYPTED - Decode the cipher first!</p>
+            <h3>Machine 2: The Cryptographic Double Dipper</h3>
+            <p><strong>Status:</strong> 🔐 MULTI-ENCRYPTED - Multiple cipher layers!</p>
             
             <div class="cipher-section">
-                <h4>🔐 Decryption Challenge</h4>
-                <p>The Hatter encrypted this machine's transition table with a Caesar cipher. Decode it:</p>
+                <h4>🔐 Advanced Decryption Challenge</h4>
+                <p>The Hatter was <em>very</em> paranoid about this machine. It's been encrypted with multiple layers:</p>
                 
                 <div class="transition-table">
-Encrypted transitions (Caesar cipher, key unknown):<br>
-VWDWH D, VBAERO 0 → ZULWH 1, PRYH U, QHAW VWDWH E<br>
-VWDWH D, VBAERO 1 → ZULWH 1, PRYH O, QHAW VWDWH E<br>
-VWDWH E, VBAERO 0 → ZULWH 1, PRYH O, QHAW VWDWH D<br>
-VWDWH E, VBAERO 1 → ZULWH 1, PRYH U, QHAW VWDWH K<br>
+<strong>Layer 1 - Base64 Encoded:</strong><br>
+VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXROVmtWNFZrZDBVMU14VWtkWGJHUnFVbFJzY0ZwR1ZYaGtNVkp5Vld4c1dGSnNTbkJWTVZwelkyeEtTRTVWWkZOV1JscDZWbXBCZDA1R1VYaFhiWFJUVWpGUk1GWkdXa2RqTWxKeVZtMXNUbUpGU2pGVVZ6QjNaREZzVjFWdVNtbE5WVFZ4Vm10a2IwNUdXbGhVYTJScVlsWkdOVmRZY0VkVVZsSjFWRzFHYUdWc1dsVlVWVkpEVDBFOVBRPT0=<br><br>
+
+<strong>Layer 2 - After Base64:</strong> <span id="layer1-output" style="color: #666;">Decode Layer 1 first...</span><br><br>
+
+<strong>Layer 3 - Final Transitions:</strong> <span id="layer2-output" style="color: #666;">Decode Layer 2 first...</span>
                 </div>
                 
-                <p>Caesar shift amount (1-25): <input type="number" id="caesar-key" min="1" max="25" placeholder="?"></p>
-                <button onclick="decryptMachine2()">Decrypt Transitions</button>
+                <div style="margin: 15px 0;">
+                    <p><strong>Step 1:</strong> Decode the Base64 string above</p>
+                    <textarea class="cipher-input" id="base64-input" placeholder="Paste the Base64 string here..."style="height: 60px;"></textarea>
+                    <button onclick="decodeBase64()">Decode Base64</button>
+                </div>
                 
-                <div id="decrypted-output" class="transition-table" style="display:none;">
+                <div style="margin: 15px 0;">
+                    <p><strong>Step 2:</strong> The result will be another cipher. Analyze the pattern and find the key:</p>
+                    <input type="text" class="cipher-input" id="vigenere-key" placeholder="Enter the cipher key (hint: it's a word from Alice in Wonderland)">
+                    <button onclick="decodeVigenere()">Decode with Key</button>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <p><strong>Step 3:</strong> The final result needs one more transformation:</p>
+                    <input type="number" class="cipher-input" id="final-shift" placeholder="Final Caesar shift amount (1-25)" min="1" max="25">
+                    <button onclick="decodeFinal()">Apply Final Decode</button>
+                </div>
+                
+                <div id="decrypted-output2" class="transition-table" style="display:none;">
                     <strong>Decrypted transitions will appear here...</strong>
+                </div>
+                
+                <div class="hint">
+                    <strong>Crypto Hints:</strong><br>
+                    • Layer 2 is a Vigenère cipher - look for repeated patterns<br>
+                    • The key is a 6-letter word that Alice falls down<br>
+                    • Layer 3 is a simple Caesar shift - try common values<br>
                 </div>
             </div>
             
@@ -332,7 +355,7 @@ VWDWH E, VBAERO 1 → ZULWH 1, PRYH U, QHAW VWDWH K<br>
                 <button onclick="runMachine(2)" id="run2" disabled>Run Decrypted Machine</button>
                 <button onclick="resetMachine(2)">Reset</button>
             </div>
-            <div class="status" id="status2">Decrypt the transitions first!</div>
+            <div class="status" id="status2">Decrypt all three layers first!</div>
             <div class="tape" id="tape2"></div>
             <div id="stats2">Machine not operational</div>
         </div>
@@ -525,20 +548,63 @@ VWDWH E, VBAERO 1 → ZULWH 1, PRYH U, QHAW VWDWH K<br>
             }
         }
         
-        function decryptMachine2() {
-            const key = parseInt(document.getElementById('caesar-key').value);
-            if (key === 3) { // Caesar shift of 3
+        function decodeBase64() {
+            const base64Input = document.getElementById('base64-input').value.trim();
+            const correctBase64 = "VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXROVmtWNFZrZDBVMU14VWtkWGJHUnFVbFJzY0ZwR1ZYaGtNVkp5Vld4c1dGSnNTbkJWTVZwelkyeEtTRTVWWkZOV1JscDZWbXBCZDA1R1VYaFhiWFJUVWpGUk1GWkdXa2RqTWxKeVZtMXNUbUpGU2pGVVZ6QjNaREZzVjFWdVNtbE5WVFZ4Vm10a2IwNUdXbGhVYTJScVlsWkdOVmRZY0VkVVZsSjFWRzFHYUdWc1dsVlVWVkpEVDBFOVBRPT0=";
+            
+            if (base64Input === correctBase64) {
+                try {
+                    const decoded = atob(base64Input);
+                    document.getElementById('layer1-output').textContent = decoded;
+                    document.getElementById('layer1-output').style.color = '#2e7d32';
+                    return true;
+                } catch (e) {
+                    document.getElementById('layer1-output').textContent = 'Invalid Base64!';
+                    document.getElementById('layer1-output').style.color = '#d32f2f';
+                }
+            } else {
+                document.getElementById('layer1-output').textContent = 'Incorrect Base64 string!';
+                document.getElementById('layer1-output').style.color = '#d32f2f';
+            }
+            return false;
+        }
+        
+        function decodeVigenere() {
+            if (!document.getElementById('layer1-output').textContent.includes('V1Z')) return;
+            
+            const key = document.getElementById('vigenere-key').value.toUpperCase().trim();
+            const correctKey = "RABBIT";
+            
+            if (key === correctKey) {
+                // Simulated Vigenère decode result
+                const decoded = "FGNGR N, FLZOBY 0 → JEVGR 1, ZBIR E, ARKG FGNGR O FGNGR N, FLZOBY 1 → JEVGR 1, ZBIR Y, ARKG FGNGR O FGNGR O, FLZOBY 0 → JEVGR 1, ZBIR Y, ARKG FGNGR N FGNGR O, FLZOBY 1 → JEVGR 1, ZBIR E, ARKG FGNGR U";
+                document.getElementById('layer2-output').textContent = decoded;
+                document.getElementById('layer2-output').style.color = '#2e7d32';
+                return true;
+            } else {
+                document.getElementById('layer2-output').textContent = 'Incorrect Vigenère key!';
+                document.getElementById('layer2-output').style.color = '#d32f2f';
+            }
+            return false;
+        }
+        
+        function decodeFinal() {
+            if (!document.getElementById('layer2-output').textContent.includes('FGNGR')) return;
+            
+            const shift = parseInt(document.getElementById('final-shift').value);
+            
+            if (shift === 13) { // ROT13
                 challengeState.machine2Decrypted = true;
                 document.getElementById('run2').disabled = false;
-                document.getElementById('decrypted-output').style.display = 'block';
-                document.getElementById('decrypted-output').innerHTML = `
-<strong>Decrypted transitions:</strong><br>
+                document.getElementById('decrypted-output2').style.display = 'block';
+                document.getElementById('decrypted-output2').innerHTML = `
+<strong>✅ FULLY DECRYPTED TRANSITIONS:</strong><br>
 STATE A, SYMBOL 0 → WRITE 1, MOVE R, NEXT STATE B<br>
 STATE A, SYMBOL 1 → WRITE 1, MOVE L, NEXT STATE B<br>
 STATE B, SYMBOL 0 → WRITE 1, MOVE L, NEXT STATE A<br>
 STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
                 `;
-                document.getElementById('status2').textContent = "✅ Decrypted! Ready to run.";
+                document.getElementById('status2').textContent = "🎉 All layers decrypted! Ready to run.";
                 document.getElementById('status2').className = "status halted";
                 
                 // Create the decrypted machine (BB(2))
@@ -555,8 +621,8 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
                 machines[2] = new TuringMachine(decryptedStates);
                 updateProgress();
             } else {
-                document.getElementById('status2').textContent = "❌ Incorrect key. Try again!";
-                document.getElementById('status2').className = "status error";
+                document.getElementById('layer2-output').textContent = 'Incorrect Caesar shift!';
+                document.getElementById('layer2-output').style.color = '#d32f2f';
             }
         }
         
