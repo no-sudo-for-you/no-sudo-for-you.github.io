@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alice in Pwnderland CTF</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎩</text></svg>" type="image/x-icon" />
+    
+    <style id="theme-color">
+    :root {
+        --theme-color: #2D1B69;
+        --light-purple: #E8E0FF;
+        --purple: #6B46C1;
+        --medium-purple: #8B5CF6;
+        --gold: #F59E0B;
+        --red: #DC2626;
+    }
+  
+    .text-header-text{
+        color: var(--theme-color) !important;
+    }
+
+    body {
+        font-family: 'Georgia', 'Times New Roman', serif !important;
+        background: linear-gradient(135deg, #E8E0FF 0%, #F3F0FF 100%);
+        min-height: 100vh;
+    }
+
+    .font-heading {
+        font-family: 'Georgia', 'Times New Roman', serif !important;
+    }
+
+    .bg-nav-bg {
+        background: linear-gradient(90deg, var(--light-purple) 0%, #F3F0FF 100%) !important;
+        border-bottom: 3px solid var(--purple) !important;
+    }
+
+    .bg-header-bg {
+        background: linear-gradient(135deg, var(--light-purple) 0%, #F3F0FF 100%) !important;
+        border-bottom: 4px solid var(--purple) !important;
+    }
+
+    .text-white {
+        color: var(--theme-color) !important;
+        text-decoration: none !important;
+        opacity: 1 !important;
+    }
+
+    .nav-item {
+        margin-bottom: 0 !important;
+    }
+
+    .bg-inner-nav-bg a {
+        color: var(--theme-color) !important;
+    }
+
+    .font-heading {
+        color: var(--theme-color) !important;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--medium-purple) !important;
+    }
+
+    .btn-submit {
+        background-color: var(--purple) !important;
+    }
+
+    .hover\:bg-primary-darker {
+        background-color: var(--purple) !important;
+    }
+
+    .hover\:bg-primary-darker:hover {
+        background-color: var(--medium-purple) !important;
+    }
+
+    .text-primary-darker {
+        background-color: var(--light-purple) !important;
+        color: var(--purple) !important;
+        border-color: var(--purple) !important;
+    }
+
+    /* Custom Alice in Pwnderland Styling */
+    .rabbit-hole {
+        background: radial-gradient(circle, #2D1B69 0%, #1E1B4B 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 1rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .playing-card {
+        background: white;
+        border: 2px solid var(--red);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .playing-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .cheshire-grin {
+        color: var(--purple);
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(107, 70, 193, 0.3);
+    }
+    </style>
+  </head>
+  <body>
+    <div class="flex flex-col justify-between min-h-screen">
+      <div>
+        <nav class="text-white bg-nav-bg border-nav-border" style="padding: 1rem; box-shadow: 0 2px 10px rgba(107, 70, 193, 0.2);">
+          <div class="flex flex-wrap justify-between items-center p-4 mx-auto max-w-screen-xl">
+            <a href="/" class="flex items-center">
+              <span style="font-size: 2rem; margin-right: 0.5rem;">🎩</span>
+              <span style="font-size: 1.5rem; font-weight: bold; color: var(--theme-color);">Alice in Pwnderland CTF</span>
+            </a>
+            <div class="flex space-x-6">
+              <a href="/challenges" class="text-theme-color hover:text-purple-600 font-medium">Challenges</a>
+              <a href="/teams" class="text-theme-color hover:text-purple-600 font-medium">Teams</a>
+              <a href="/scoreboard" class="text-theme-color hover:text-purple-600 font-medium">Scoreboard</a>
+              <a href="/profile" class="text-theme-color hover:text-purple-600 font-medium">Profile</a>
+            </div>
+          </div>
+        </nav>
+        
+        <main role="main">
+          <div class="container px-8 mx-auto">
+            <style>
+                /* Body */
+                .container {
+                    max-width: 100% !important;
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+
+                body {
+                    font-family: 'Georgia', 'Times New Roman', serif !important;
+                    font-size: 1rem !important;
+                    line-height: 1.6 !important;
+                    color: #2D1B69 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    padding-bottom: 2rem !important;
+                }
+
+                main {
+                    padding: 0 !important;
+                }
+
+                p {
+                    margin-top: 1rem;
+                }
+
+                /* Header */
+                header {
+                    background: linear-gradient(135deg, #E8E0FF 0%, #F3F0FF 100%) !important;
+                    padding: 4rem 2rem 3rem 2rem !important;
+                    text-align: center !important;
+                    border-bottom: 4px solid #6B46C1 !important;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                header::before {
+                    content: "♠️ ♥️ ♦️ ♣️";
+                    position: absolute;
+                    top: 1rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 1.5rem;
+                    opacity: 0.6;
+                    animation: cardSpin 10s linear infinite;
+                }
+
+                @keyframes cardSpin {
+                    0% { transform: translateX(-50%) rotate(0deg); }
+                    100% { transform: translateX(-50%) rotate(360deg); }
+                }
+
+                header h1 {
+                    font-size: 3.5rem !important;
+                    font-weight: bold !important;
+                    color: #6B46C1 !important;
+                    line-height: 1.2 !important;
+                    margin-bottom: 1rem !important;
+                    text-shadow: 2px 2px 4px rgba(107, 70, 193, 0.3);
+                }
+
+                .header-subtitle {
+                    font-size: 1.2rem;
+                    color: #2D1B69;
+                    font-style: italic;
+                    margin-top: 0.5rem;
+                }
+
+                .header-divider {
+                    height: 3px !important;
+                    background: linear-gradient(90deg, #6B46C1, #8B5CF6, #6B46C1) !important;
+                    margin: 1rem auto !important;
+                    width: 200px;
+                }
+
+                /* Sections */
+                section {
+                    margin-bottom: 2rem !important;
+                    max-width: 1000px !important;
+                    margin: 2rem auto !important;
+                    background: rgba(255, 255, 255, 0.8);
+                    padding: 2rem;
+                    border-radius: 15px;
+                    box-shadow: 0 8px 25px rgba(107, 70, 193, 0.1);
+                    border: 1px solid rgba(107, 70, 193, 0.2);
+                }
+
+                h2 {
+                    color: #6B46C1 !important;
+                    margin-bottom: 1rem !important;
+                    font-size: 28px !important;
+                    margin-top: 0 !important;
+                    font-weight: bold;
+                    position: relative;
+                    padding-left: 2rem;
+                }
+
+                h2::before {
+                    content: "🍄";
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    font-size: 1.5rem;
+                }
+
+                h3 {
+                    font-size: 18px !important;
+                    margin-top: 1rem !important;
+                    font-weight: bold;
+                    color: #2D1B69;
+                }
+
+                .bullets {
+                    padding-left: 2.5rem !important;
+                    list-style-type: none;
+                    margin-top: 0.5rem;
+                }
+
+                .bullets li {
+                    margin-bottom: 0.5rem !important;
+                    padding-left: 5px;
+                    position: relative;
+                }
+
+                .bullets li::before {
+                    content: "🃏";
+                    position: absolute;
+                    left: -1.5rem;
+                    top: 0;
+                }
+
+                code {
+                    font-family: 'Courier New', monospace !important;
+                    background-color: #F3F0FF !important;
+                    color: #6B46C1 !important;
+                    padding: 0.3rem 0.6rem !important;
+                    border-radius: 6px !important;
+                    border: 1px solid #E8E0FF;
+                    font-weight: bold;
+                }
+
+                .qa-block {
+                    margin-bottom: 2rem !important;
+                    background: white;
+                    padding: 1.5rem;
+                    border-radius: 10px;
+                    border-left: 4px solid #6B46C1;
+                    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.1);
+                }
+
+                .question {
+                    font-weight: bold !important;
+                    margin-bottom: 0.8rem !important;
+                    color: #2D1B69;
+                    font-size: 1.1rem;
+                    position: relative;
+                    padding-left: 1.5rem;
+                }
+
+                .question::before {
+                    content: "🐰";
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+
+                .qa-block p {
+                    padding-left: 1.5rem !important;
+                    margin-top: 0.5rem !important;
+                }
+
+                .highlight {
+                    color: #6B46C1 !important;
+                    text-decoration: none !important;
+                    font-weight: bold;
+                }
+
+                .highlight:hover {
+                    text-decoration: underline !important;
+                    color: #8B5CF6 !important;
+                }
+
+                .mad-hatter-note {
+                    background: linear-gradient(45deg, #FEF3C7, #FDE68A);
+                    border: 2px dashed #F59E0B;
+                    padding: 1rem;
+                    border-radius: 10px;
+                    margin: 1rem 0;
+                    position: relative;
+                }
+
+                .mad-hatter-note::before {
+                    content: "🎩 Mad Hatter's Tip:";
+                    font-weight: bold;
+                    color: #92400E;
+                    display: block;
+                    margin-bottom: 0.5rem;
+                }
+
+                .queen-warning {
+                    background: linear-gradient(45deg, #FEE2E2, #FECACA);
+                    border: 2px solid #DC2626;
+                    padding: 1rem;
+                    border-radius: 10px;
+                    margin: 1rem 0;
+                    position: relative;
+                }
+
+                .queen-warning::before {
+                    content: "👑 Queen's Decree:";
+                    font-weight: bold;
+                    color: #991B1B;
+                    display: block;
+                    margin-bottom: 0.5rem;
+                }
+            </style>
+
+            <!-- HEADER -->
+            <header>
+                <h1>Welcome to Pwnderland</h1>
+                <div class="header-subtitle">"We're all mad here... but some of us know how to hack!"</div>
+            </header>
+            <div class="header-divider"></div>
+            
+            <main>
+                <!-- GENERAL -->
+                <section>
+                    <h2>Down the Rabbit Hole</h2>
+
+                    <div class="qa-block">
+                        <div class="question">Q: What is Alice in Pwnderland CTF?</div>
+                        <p>Welcome to our whimsical cybersecurity adventure! Just like Alice fell down the rabbit hole into a world of wonder, you'll tumble into a realm of cryptographic puzzles, reverse engineering challenges, and digital forensics mysteries. Teams must solve hands-on challenges across various categories to collect flags and earn points in this mad, mad world of hacking!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: Do I need experience to join this tea party?</div>
+                        <p>Like the Mad Hatter's tea party, everyone's welcome! However, you'll want some basic knowledge of Linux, networking, cryptography, and common security tools. Don't worry if you're new - even Alice started as a curious beginner!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: What should I bring to Pwnderland?</div>
+                        <p>Pack your digital toolkit! Bring a laptop with Linux capabilities, your favorite hacking tools, and a curious mind. You'll also need Discord access to chat with the Cheshire Cat (our support team) and other players in this magical realm.</p>
+                        
+                        <div class="mad-hatter-note">
+                            Don't forget to install essential tools like Wireshark, Burp Suite, Python, and whatever else might help you solve the Queen's riddles!
+                        </div>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How are challenges organized in Pwnderland?</div>
+                        <p>Our challenges are sorted by the inhabitants of Pwnderland:</p>
+                        <ul class="bullets">
+                            <li><strong>White Rabbit Challenges</strong> - Easy (Perfect for beginners following the rabbit)</li>
+                            <li><strong>Cheshire Cat Challenges</strong> - Medium (Grinning puzzles that require some wit)</li>
+                            <li><strong>Mad Hatter Challenges</strong> - Hard (Utterly mad problems for the brave)</li>
+                            <li><strong>Queen of Hearts Challenges</strong> - Expert ("Off with their heads!" - Only for the boldest hackers)</li>
+                        </ul>
+                        <p>The more challenging the puzzle, the more points await! Progress at your own pace through this topsy-turvy world.</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How long does this adventure last?</div>
+                        <p>Our journey through Pwnderland runs for exactly [TIME_DURATION]. Unlike Alice's endless adventure, ours has a definite end - so manage your time wisely! There are no individual time limits for challenges, but everything must be completed within the competition window.</p>
+                        
+                        <div class="queen-warning">
+                            The Queen demands punctuality! Late submissions will not be accepted.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TEAM -->
+                <section>
+                    <h2>Tea Party Rules & Teams</h2>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How many can join my tea party (team)?</div>
+                        <p>Like a proper tea party, teams should have 2 to 4 participants. Too few and you'll be lonely, too many and there won't be enough chairs around the table!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: Can I ask for hints from the Cheshire Cat?</div>
+                        <p>The Cheshire Cat loves riddles and may offer hints for some challenges. However, every hint comes with a price - 10% of that challenge's points will vanish like the Cat's grin! (e.g., 10 points disappear from a 100-point challenge).</p>
+                        
+                        <div class="mad-hatter-note">
+                            "Take more tea," the March Hare said earnestly. "I've had nothing yet," Alice replied, "so I can't take more." Sometimes you need a hint, sometimes you just need more tea!
+                        </div>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: What tools can I use in Pwnderland?</div>
+                        <p>In this topsy-turvy world, you may use any tools necessary to solve the challenges! However, attempting to hack the competition platform itself or interfere with other players' experiences is strictly forbidden - even the Queen of Hearts has rules!</p>
+                        
+                        <div class="queen-warning">
+                            "Off with their heads!" - Any attempts to attack the platform or other participants will result in immediate disqualification.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TROUBLESHOOT -->
+                <section>
+                    <h2>Platform & Troubleshooting</h2>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How do I start my adventure?</div>
+                        <p>Click the "Challenges" tab to enter the various rooms of Pwnderland. Choose your category, pick a challenge, and begin your descent down the rabbit hole!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: What does a flag look like in Pwnderland?</div>
+                        <p>Our flags are magical artifacts that look like this:</p>
+                        <p style="padding-top: 0.5rem;"><code>AL1C3CTF{[a-zA-Z0-9\-_=+[\]\\|;:'",<.>\/?!@#$%^&*()]+}</code></p>
+                        <p>Each flag is a unique key to unlock points and progress further into Pwnderland!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: My flag isn't working! The Queen is not pleased!</div>
+                        <p>Don't let the Queen have your head! Try these troubleshooting steps:</p>
+                        <ul class="bullets">
+                            <li>Carefully type or paste the flag (no magic copy-paste errors!)</li>
+                            <li>Check spelling, capitalization, and format precisely</li>
+                            <li>Flags are case-sensitive in Pwnderland</li>
+                            <li>Ensure no extra spaces have snuck in</li>
+                            <li>Still stuck? Ask the Cheshire Cat for help in our Discord server</li>
+                        </ul>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: I submitted a flag but got no points!</div>
+                        <p>Even in Pwnderland, technology can be finicky! Make sure your flag format is correct, try refreshing the page, or log out and back in. If the issue persists, contact our Cheshire Cat support team.</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: The platform is acting as mad as the Hatter!</div>
+                        <p>When technology goes topsy-turvy:</p>
+                        <ul class="bullets">
+                            <li>Refresh the page or try a different browser (Chrome or Firefox work best in Pwnderland)</li>
+                            <li>Check your internet connection to the rabbit hole</li>
+                            <li>If problems persist, reach out to our support team through Discord</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- DISCORD -->
+                <section>
+                    <h2>The Cheshire Cat's Discord Den</h2>
+                    
+                    <div class="qa-block">
+                        <div class="question">Q: What is the Discord server for?</div>
+                        <p>Our Discord server is like the Mad Hatter's tea party - a place for communication, support, and community throughout your Pwnderland adventure. Use it to:</p>
+                        <ul class="bullets">
+                            <li>Chat with other adventurers and ask the organizers questions</li>
+                            <li>Receive live updates and announcements from the White Rabbit</li>
+                            <li>Submit support tickets to summon the Cheshire Cat for help</li>
+                            <li>Share in the madness and excitement of the competition</li>
+                        </ul>
+                        
+                        <div class="mad-hatter-note">
+                            If you can't see certain channels, make sure "Show All Channels" is enabled in your Discord settings. Even in Pwnderland, you need to look in the right places!
+                        </div>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How do I get help during my adventure?</div>
+                        <p>When you need guidance, summon the Cheshire Cat by opening a support ticket in Discord! Our mystical support team can help you with:</p>
+                        <ul class="bullets">
+                            <li>Requesting hints (at the Cat's discretion)</li>
+                            <li>Reporting bugs or broken challenges</li>
+                            <li>Asking clarifying questions about the puzzles</li>
+                            <li>General navigation through Pwnderland</li>
+                        </ul>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How do I create a support ticket?</div>
+                        <p>Navigate to the designated support channel in our Discord server and click the "Create Ticket" button. This opens a private channel where only you and the Cheshire Cat (support staff) can communicate. Describe your issue clearly, and a member of our team will appear with a grin to help!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How do I join the Discord tea party?</div>
+                        <p>Each team receives an invitation to our magical Discord realm. If your invitation got lost in the rabbit hole or isn't working, please contact our organizers immediately!</p>
+                    </div>
+                </section>
+
+                <!-- SCORING -->
+                <section>
+                    <h2>Scoring & The Queen's Prizes</h2>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How does scoring work in Pwnderland?</div>
+                        <p>Each challenge holds a certain number of points, like collecting playing cards in the Queen's deck. Your team's score is the total of all flags you capture. The scoreboard updates in real-time, so you can watch your progress up the leaderboard!</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: What treasures await the victorious?</div>
+                        <p>The Queen of Hearts has decreed that prizes shall be awarded to the top three teams! Beyond the material rewards, you'll gain invaluable experience, recognition, and bragging rights for conquering Pwnderland.</p>
+                        
+                        <div class="queen-warning">
+                            The Queen's word is final on all prizes and eligibility. Her decisions are absolute!
+                        </div>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: How are the champions chosen?</div>
+                        <p>Winners are determined by the total points earned throughout the adventure. In case of a tie, the team that reached their final score first wins (time is of the essence in Pwnderland!). The Queen's decision on winners and prize eligibility is final and absolute.</p>
+                    </div>
+
+                    <div class="qa-block">
+                        <div class="question">Q: When will the champions be crowned?</div>
+                        <p>The victorious teams will be announced at the end of the competition during our closing ceremony. The Queen herself will recognize the champions who successfully navigated through all of Pwnderland's challenges!</p>
+                    </div>
+                </section>
+
+                <!-- STILL HAVE QUESTIONS -->
+                <section>
+                    <h2>Still Lost in Pwnderland?</h2>
+                    <p>If you find yourself more confused than Alice at the Mad Hatter's tea party, don't worry! Reach out to our support team through Discord or email. Remember, we're all mad here, but we're here to help guide you through this wonderful adventure!</p>
+                    
+                    <div style="text-align: center; margin-top: 2rem; font-style: italic; color: #6B46C1;">
+                        <p>"But I don't want to go among mad people," Alice remarked.<br>
+                        "Oh, you can't help that," said the Cat: "we're all mad here. I'm mad. You're mad."<br>
+                        "How do you know I'm mad?" said Alice.<br>
+                        "You must be," said the Cat, "or you wouldn't have come here."</p>
+                        <p style="margin-top: 1rem; font-weight: bold;">Welcome to Pwnderland! 🎩🐰🃏</p>
+                    </div>
+                </section>
+            </main>
+          </div>
+        </main>
+      </div>
+      
+      <footer style="background: linear-gradient(90deg, #E8E0FF, #F3F0FF); padding: 2rem; text-align: center; border-top: 3px solid #6B46C1; margin-top: 2rem;">
+        <div style="color: #6B46C1; font-style: italic;">
+          "Take more tea," the March Hare said to Alice earnestly.<br>
+          <strong>Powered by CTFd | Alice in Pwnderland CTF</strong>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
