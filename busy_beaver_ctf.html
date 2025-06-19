@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad Hatter's Turing Tea Party - Advanced Challenge</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #4a154b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .story {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #764ba2;
+            font-style: italic;
+        }
+        
+        .challenge-section {
+            margin-bottom: 30px;
+        }
+        
+        .machine-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .machine-card h3 {
+            color: #4a154b;
+            margin-top: 0;
+        }
+        
+        .broken {
+            border-color: #ff6b6b;
+            background: #ffe6e6;
+        }
+        
+        .encrypted {
+            border-color: #4ecdc4;
+            background: #e6fffe;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5a3a7a;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .tape {
+            font-family: 'Courier New', monospace;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            min-height: 40px;
+        }
+        
+        .tape-cell {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #333;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 1px;
+            background: white;
+        }
+        
+        .tape-cell.head {
+            background: #ffeb3b;
+            font-weight: bold;
+        }
+        
+        .status {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .status.running {
+            color: #2196f3;
+        }
+        
+        .status.halted {
+            color: #4caf50;
+        }
+        
+        .status.error {
+            color: #f44336;
+        }
+        
+        .transition-table {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        
+        .cipher-section {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .cipher-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+        }
+        
+        .debug-section {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .flag-section {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .flag-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+        
+        .hint {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .warning {
+            background: #ffebee;
+            border: 1px solid #ffcdd2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #c62828;
+        }
+        
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .analysis-table th, .analysis-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .analysis-table th {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .decryption-progress {
+            display: none;
+            margin: 10px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4caf50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎩 Mad Hatter's Broken Tea Party 🫖</h1>
+            <p><em>"Oh dear! The machines are all broken... can you fix them?"</em></p>
+        </div>
+        
+        <div class="story">
+            <p><strong>The Cheshire Cat grins wickedly...</strong></p>
+            <p>"I'm afraid the Mad Hatter's tea machines have been... <em>tampered with</em>. Some have broken transitions, others are encrypted, and one requires you to reverse-engineer it entirely!"</p>
+            
+            <p>"To find the true Busy Beaver numbers, you'll need to:</p>
+            <ul>
+                <li>🔧 <strong>Debug broken state machines</strong></li>
+                <li>🔐 <strong>Decrypt hidden transition tables</strong></li>
+                <li>🕵️ <strong>Reverse engineer from execution traces</strong></li>
+                <li>🧮 <strong>Calculate the maximum productivity</strong></li>
+            </ul>
+            
+            <p><strong>Warning:</strong> Simply running the machines won't work this time. You'll need to understand, fix, and analyze each one!</p>
+        </div>
+        
+        <!-- Machine 1: Broken Transitions -->
+        <div class="machine-card broken">
+            <h3>Machine 1: The Corrupted Sipper</h3>
+            <p><strong>Status:</strong> ⚠️ CORRUPTED - Transition table has errors!</p>
+            
+            <div class="debug-section">
+                <h4>🔧 Debug Challenge</h4>
+                <p>The transition table below has been corrupted. Fix the errors to make it a valid BB(1) machine:</p>
+                
+                <div class="transition-table">
+Current (broken) transitions:<br>
+State A, Symbol 0 → Write ?, Move R, Next State H<br>
+State A, Symbol 1 → Write 1, Move ?, Next State H<br><br>
+
+<strong>Hint:</strong> A BB(1) machine should write exactly 1 symbol before halting.
+                </div>
+                
+                <p>Fix the transitions:</p>
+                <input type="text" class="cipher-input" id="fix1a" placeholder="State A, Symbol 0 → Write ? (enter 0 or 1)">
+                <input type="text" class="cipher-input" id="fix1b" placeholder="State A, Symbol 1 → Move ? (enter L or R)">
+                <button onclick="debugMachine1()">Test Fixed Machine</button>
+            </div>
+            
+            <div class="controls">
+                <button onclick="runMachine(1)" id="run1" disabled>Run Fixed Machine</button>
+                <button onclick="resetMachine(1)">Reset</button>
+            </div>
+            <div class="status" id="status1">Fix the transitions first!</div>
+            <div class="tape" id="tape1"></div>
+            <div id="stats1">Machine not operational</div>
+        </div>
+        
+        <!-- Machine 2: Encrypted -->
+        <div class="machine-card encrypted">
+            <h3>Machine 2: The Encrypted Double Dipper</h3>
+            <p><strong>Status:</strong> 🔐 ENCRYPTED - Decode the cipher first!</p>
+            
+            <div class="cipher-section">
+                <h4>🔐 Decryption Challenge</h4>
+                <p>The Hatter encrypted this machine's transition table with a Caesar cipher. Decode it:</p>
+                
+                <div class="transition-table">
+Encrypted transitions (Caesar cipher, key unknown):<br>
+VWDWH D, VBAERO 0 → ZULWH 1, PRYH U, QHAW VWDWH E<br>
+VWDWH D, VBAERO 1 → ZULWH 1, PRYH O, QHAW VWDWH E<br>
+VWDWH E, VBAERO 0 → ZULWH 1, PRYH O, QHAW VWDWH D<br>
+VWDWH E, VBAERO 1 → ZULWH 1, PRYH U, QHAW VWDWH K<br>
+                </div>
+                
+                <p>Caesar shift amount (1-25): <input type="number" id="caesar-key" min="1" max="25" placeholder="?"></p>
+                <button onclick="decryptMachine2()">Decrypt Transitions</button>
+                
+                <div id="decrypted-output" class="transition-table" style="display:none;">
+                    <strong>Decrypted transitions will appear here...</strong>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button onclick="runMachine(2)" id="run2" disabled>Run Decrypted Machine</button>
+                <button onclick="resetMachine(2)">Reset</button>
+            </div>
+            <div class="status" id="status2">Decrypt the transitions first!</div>
+            <div class="tape" id="tape2"></div>
+            <div id="stats2">Machine not operational</div>
+        </div>
+        
+        <!-- Machine 3: Reverse Engineering -->
+        <div class="machine-card">
+            <h3>Machine 3: The Mystery Triple</h3>
+            <p><strong>Status:</strong> 🕵️ UNKNOWN - Reverse engineer from execution trace!</p>
+            
+            <div class="debug-section">
+                <h4>🕵️ Reverse Engineering Challenge</h4>
+                <p>No transition table available! Analyze this execution trace to determine what BB(3) produces:</p>
+                
+                <table class="analysis-table">
+                    <tr><th>Step</th><th>State</th><th>Head Pos</th><th>Tape Before</th><th>Action</th><th>Tape After</th></tr>
+                    <tr><td>0</td><td>A</td><td>0</td><td>[0]</td><td>Start</td><td>[0]</td></tr>
+                    <tr><td>1</td><td>A</td><td>0</td><td>[0]</td><td>Write 1, Move R, → B</td><td>[1]</td></tr>
+                    <tr><td>2</td><td>B</td><td>1</td><td>[1,0]</td><td>Write 1, Move R, → C</td><td>[1,1]</td></tr>
+                    <tr><td>3</td><td>C</td><td>2</td><td>[1,1,0]</td><td>Write 1, Move L, → C</td><td>[1,1,1]</td></tr>
+                    <tr><td>4</td><td>C</td><td>1</td><td>[1,1,1]</td><td>Read 1, Write 1, Move L, → A</td><td>[1,1,1]</td></tr>
+                    <tr><td>5</td><td>A</td><td>0</td><td>[1,1,1]</td><td>Read 1, Write 1, Move R, → H</td><td>[1,1,1]</td></tr>
+                    <tr><td>-</td><td>H</td><td>1</td><td>[1,1,1]</td><td>HALT</td><td>[1,1,1]</td></tr>
+                </table>
+                
+                <p><strong>Analysis Questions:</strong></p>
+                <p>1. How many 1s are on the final tape? <input type="number" id="trace-ones" placeholder="?"></p>
+                <p>2. How many steps did it take? <input type="number" id="trace-steps" placeholder="?"></p>
+                <p>3. This trace shows a shorter execution. The real BB(3) machine produces more 1s. 
+                   Research the actual BB(3) value: <input type="number" id="real-bb3" placeholder="?"></p>
+                
+                <button onclick="analyzeMachine3()">Analyze Trace</button>
+            </div>
+            
+            <div class="controls">
+                <button onclick="runMachine(3)" id="run3" disabled>Run BB(3) Machine</button>
+                <button onclick="resetMachine(3)">Reset</button>
+            </div>
+            <div class="status" id="status3">Analyze the execution trace</div>
+            <div class="tape" id="tape3"></div>
+            <div id="stats3">Complete the analysis above</div>
+        </div>
+        
+        <!-- Machine 4: Obfuscated -->
+        <div class="machine-card">
+            <h3>Machine 4: The Obfuscated Quad</h3>
+            <p><strong>Status:</strong> 🤖 HEAVILY OBFUSCATED - Real challenge!</p>
+            
+            <div class="debug-section">
+                <h4>🤖 Advanced Challenge</h4>
+                <p>This machine is heavily obfuscated. You'll need to research BB(4) independently!</p>
+                
+                <div class="warning">
+                    <strong>⚠️ No hints provided!</strong><br>
+                    Research "Busy Beaver BB(4)" and "4-state Turing machine" to find the answer.
+                    The actual BB(4) value is a well-documented mathematical result.
+                </div>
+                
+                <p>Enter the BB(4) value: <input type="number" id="bb4-research" placeholder="? (research required)"></p>
+                <button onclick="validateBB4()">Verify BB(4)</button>
+            </div>
+            
+            <div class="controls">
+                <button onclick="runMachine(4)" id="run4" disabled>Run BB(4) Machine</button>
+                <button onclick="resetMachine(4)">Reset</button>
+            </div>
+            <div class="status" id="status4">Research BB(4) independently</div>
+            <div class="tape" id="tape4"></div>
+            <div id="stats4">No simulation available - research required</div>
+        </div>
+        
+        <div class="hint">
+            <strong>💡 Multi-layered Challenge Hints:</strong><br>
+            • Machine 1: Think about what makes a valid 1-state busy beaver<br>
+            • Machine 2: Caesar ciphers shift letters by a fixed amount<br>
+            • Machine 3: The trace shows a simple case, but BB(3) is actually larger<br>
+            • Machine 4: Academic papers and OEIS sequence A028444 might help<br>
+        </div>
+        
+        <div class="flag-section">
+            <h2>🏁 Submit Your Analysis</h2>
+            <p>Once you've solved all four challenges, the flag format is:</p>
+            <p><code>AL1C3CTF{BB1_BB2_BB3_BB4}</code></p>
+            
+            <div class="decryption-progress" id="progress-section">
+                <p>Challenge Progress:</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div id="progress-text">0/4 machines solved</div>
+            </div>
+            
+            <input type="text" class="flag-input" id="finalFlag" placeholder="Enter final flag: AL1C3CTF{?_?_?_?}" readonly>
+            <button onclick="generateFlag()" style="width: 100%; padding: 15px; font-size: 18px; margin-top: 10px;">
+                🎯 Generate Final Flag
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Obfuscated busy beaver implementations (base64 encoded)
+        const xQ7 = "ewogICAgIkEiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiUiIsIm5leHRTdGF0ZSI6IkgifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJMIiwibmV4dFN0YXRlIjoiSCJ9CiAgICB9Cn0=";
+        const pZ9 = "ewogICAgIkEiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiUiIsIm5leHRTdGF0ZSI6IkIifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJMIiwibmV4dFN0YXRlIjoiQiJ9CiAgICB9LAogICAgIkIiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiTCIsIm5leHRTdGF0ZSI6IkEifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJSIiwibmV4dFN0YXRlIjoiSCJ9CiAgICB9Cn0=";
+        
+        // Challenge state tracking
+        let challengeState = {
+            machine1Fixed: false,
+            machine2Decrypted: false,
+            machine3Analyzed: false,
+            machine4Researched: false
+        };
+        
+        let machines = {};
+        let bb4Value = 13; // The actual BB(4) value
+        
+        class TuringMachine {
+            constructor(states, tape = [0], headPos = 0, currentState = 'A') {
+                this.states = states;
+                this.tape = [...tape];
+                this.headPos = headPos;
+                this.currentState = currentState;
+                this.halted = false;
+                this.steps = 0;
+            }
+            
+            step() {
+                if (this.halted) return false;
+                
+                const symbol = this.tape[this.headPos] || 0;
+                const transition = this.states[this.currentState] && this.states[this.currentState][symbol];
+                
+                if (!transition) {
+                    this.halted = true;
+                    return false;
+                }
+                
+                this.tape[this.headPos] = transition.write;
+                
+                if (transition.move === 'R') {
+                    this.headPos++;
+                    if (this.headPos >= this.tape.length) {
+                        this.tape.push(0);
+                    }
+                } else if (transition.move === 'L') {
+                    this.headPos--;
+                    if (this.headPos < 0) {
+                        this.tape.unshift(0);
+                        this.headPos = 0;
+                    }
+                }
+                
+                this.currentState = transition.nextState;
+                if (this.currentState === 'H') {
+                    this.halted = true;
+                }
+                
+                this.steps++;
+                return true;
+            }
+            
+            countOnes() {
+                return this.tape.filter(x => x === 1).length;
+            }
+            
+            reset() {
+                this.tape = [0];
+                this.headPos = 0;
+                this.currentState = 'A';
+                this.halted = false;
+                this.steps = 0;
+            }
+        }
+        
+        function debugMachine1() {
+            const fix1a = document.getElementById('fix1a').value;
+            const fix1b = document.getElementById('fix1b').value;
+            
+            if (fix1a === '1' && fix1b === 'R') {
+                challengeState.machine1Fixed = true;
+                document.getElementById('run1').disabled = false;
+                document.getElementById('status1').textContent = "✅ Machine fixed! Ready to run.";
+                document.getElementById('status1').className = "status halted";
+                
+                // Create the fixed machine
+                const fixedStates = JSON.parse(atob(xQ7));
+                machines[1] = new TuringMachine(fixedStates);
+                updateProgress();
+            } else {
+                document.getElementById('status1').textContent = "❌ Incorrect fix. Try again!";
+                document.getElementById('status1').className = "status error";
+            }
+        }
+        
+        function decryptMachine2() {
+            const key = parseInt(document.getElementById('caesar-key').value);
+            if (key === 3) { // Caesar shift of 3
+                challengeState.machine2Decrypted = true;
+                document.getElementById('run2').disabled = false;
+                document.getElementById('decrypted-output').style.display = 'block';
+                document.getElementById('decrypted-output').innerHTML = `
+<strong>Decrypted transitions:</strong><br>
+STATE A, SYMBOL 0 → WRITE 1, MOVE R, NEXT STATE B<br>
+STATE A, SYMBOL 1 → WRITE 1, MOVE L, NEXT STATE B<br>
+STATE B, SYMBOL 0 → WRITE 1, MOVE L, NEXT STATE A<br>
+STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
+                `;
+                document.getElementById('status2').textContent = "✅ Decrypted! Ready to run.";
+                document.getElementById('status2').className = "status halted";
+                
+                // Create the decrypted machine (BB(2))
+                const decryptedStates = {
+                    'A': {
+                        0: {write: 1, move: 'R', nextState: 'B'},
+                        1: {write: 1, move: 'L', nextState: 'B'}
+                    },
+                    'B': {
+                        0: {write: 1, move: 'L', nextState: 'A'},
+                        1: {write: 1, move: 'R', nextState: 'H'}
+                    }
+                };
+                machines[2] = new TuringMachine(decryptedStates);
+                updateProgress();
+            } else {
+                document.getElementById('status2').textContent = "❌ Incorrect key. Try again!";
+                document.getElementById('status2').className = "status error";
+            }
+        }
+        
+        function analyzeMachine3() {
+            const ones = parseInt(document.getElementById('trace-ones').value);
+            const steps = parseInt(document.getElementById('trace-steps').value);
+            const realBB3 = parseInt(document.getElementById('real-bb3').value);
+            
+            if (ones === 3 && steps === 5 && realBB3 === 6) {
+                challengeState.machine3Analyzed = true;
+                document.getElementById('run3').disabled = false;
+                document.getElementById('status3').textContent = "✅ Analysis complete! The trace shows 3 ones in 5 steps, but BB(3) = 6.";
+                document.getElementById('status3').className = "status halted";
+                
+                // Create the actual BB(3) machine
+                const bb3States = {
+                    'A': {
+                        0: {write: 1, move: 'R', nextState: 'B'},
+                        1: {write: 1, move: 'R', nextState: 'H'}
+                    },
+                    'B': {
+                        0: {write: 1, move: 'R', nextState: 'C'},
+                        1: {write: 1, move: 'R', nextState: 'B'}
+                    },
+                    'C': {
+                        0: {write: 1, move: 'L', nextState: 'C'},
+                        1: {write: 1, move: 'L', nextState: 'A'}
+                    }
+                };
+                machines[3] = new TuringMachine(bb3States);
+                updateProgress();
+            } else {
+                document.getElementById('status3').textContent = "❌ Incorrect analysis. Check your answers!";
+                document.getElementById('status3').className = "status error";
+            }
+        }
+        
+        function validateBB4() {
+            const bb4Input = parseInt(document.getElementById('bb4-research').value);
+            if (bb4Input === 13) {
+                challengeState.machine4Researched = true;
+                document.getElementById('run4').disabled = false;
+                document.getElementById('status4').textContent = "✅ Correct! BB(4) = 13.";
+                document.getElementById('status4').className = "status halted";
+                
+                // Create the actual BB(4) machine
+                const bb4States = {
+                    'A': {
+                        0: {write: 1, move: 'R', nextState: 'B'},
+                        1: {write: 1, move: 'L', nextState: 'B'}
+                    },
+                    'B': {
+                        0: {write: 1, move: 'L', nextState: 'A'},
+                        1: {write: 0, move: 'L', nextState: 'C'}
+                    },
+                    'C': {
+                        0: {write: 1, move: 'R', nextState: 'H'},
+                        1: {write: 1, move: 'L', nextState: 'D'}
+                    },
+                    'D': {
+                        0: {write: 1, move: 'R', nextState: 'D'},
+                        1: {write: 0, move: 'R', nextState: 'A'}
+                    }
+                };
+                machines[4] = new TuringMachine(bb4States);
+                updateProgress();
+            } else {
+                document.getElementById('status4').textContent = "❌ Incorrect. Research BB(4) more carefully.";
+                document.getElementById('status4').className = "status error";
+            }
+        }
+        
+        function updateProgress() {
+            const solved = Object.values(challengeState).filter(x => x).length;
+            const progress = document.getElementById('progress-section');
+            const fill = document.getElementById('progress-fill');
+            const text = document.getElementById('progress-text');
+            
+            progress.style.display = 'block';
+            fill.style.width = (solved / 4 * 100) + '%';
+            text.textContent = `${solved}/4 machines solved`;
+            
+            if (solved === 4) {
+                text.textContent = "🎉 All challenges complete! Generate your flag!";
+                text.style.color = '#4caf50';
+                text.style.fontWeight = 'bold';
+            }
+        }
+        
+        function runMachine(num) {
+            if (!machines[num]) return;
+            
+            const machine = machines[num];
+            machine.reset();
+            
+            function runStep() {
+                if (machine.step()) {
+                    updateDisplay(num);
+                    if (!machine.halted && machine.steps < 200) { // Safety limit
+                        setTimeout(runStep, 100);
+                    }
+                } else {
+                    updateDisplay(num);
+                }
+            }
+            
+            runStep();
+        }
+        
+        function resetMachine(num) {
+            if (machines[num]) {
+                machines[num].reset();
+                updateDisplay(num);
+            }
+        }
+        
+        function updateDisplay(num) {
+            const machine = machines[num];
+            if (!machine) return;
+            
+            const tapeElement = document.getElementById(`tape${num}`);
+            const statusElement = document.getElementById(`status${num}`);
+            const statsElement = document.getElementById(`stats${num}`);
+            
+            // Update tape
+            let tapeHTML = '';
+            for (let i = 0; i < Math.max(5, machine.tape.length); i++) {
+                const cellClass = i === machine.headPos ? 'tape-cell head' : 'tape-cell';
+                tapeHTML += `<span class="${cellClass}">${machine.tape[i] || 0}</span>`;
+            }
+            tapeElement.innerHTML = tapeHTML;
+            
+            // Update status
+            if (machine.halted) {
+                statusElement.textContent = `✅ Halted! Steps: ${machine.steps}, Ones: ${machine.countOnes()}`;
+                statusElement.className = 'status halted';
+            } else {
+                statusElement.textContent = `Running... State: ${machine.currentState}`;
+                statusElement.className = 'status running';
+            }
+            
+            statsElement.textContent = `Steps: ${machine.steps} | Ones: ${machine.countOnes()}`;
+        }
+        
+        function generateFlag() {
+            const allSolved = Object.values(challengeState).every(x => x);
+            if (!allSolved) {
+                alert('Complete all four challenges first!');
+                return;
+            }
+            
+            // The correct answers based on the challenges
+            const flag = 'AL1C3CTF{1_4_6_13}';
+            document.getElementById('finalFlag').value = flag;
+            
+            alert('🎉 Congratulations! You\'ve mastered the Mad Hatter\'s complex tea party! The flag has been generated.');
+        }
+    </script>
+</body>
+</html>
