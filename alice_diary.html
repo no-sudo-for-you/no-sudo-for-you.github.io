@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Tagebuch - Eine wunderbare Entdeckung</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #f5f3f0 0%, #e8e4df 100%);
+            color: #2c2c2c;
+        }
+        
+        .document-container {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 3px solid #d4af37;
+            position: relative;
+        }
+        
+        .document-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #d4af37, #f4e4bc, #d4af37);
+            border-radius: 18px;
+            z-index: -1;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #8b4513;
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 3px double #d4af37;
+            padding-bottom: 20px;
+        }
+        
+        .date {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .greeting {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #4a4a4a;
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #8b4513;
+            font-size: 1.8rem;
+            margin-top: 35px;
+            margin-bottom: 20px;
+            border-left: 5px solid #d4af37;
+            padding-left: 15px;
+        }
+        
+        /* Force specific sections to start on new pages */
+        h2:nth-of-type(2) { /* Meine Aufnahme */
+            page-break-before: always;
+            margin-top: 0;
+        }
+        
+        h2:nth-of-type(4) { /* Die finale Zeremonie */
+            page-break-before: always;
+            margin-top: 0;
+        }
+        
+        /* Prevent breaking cipher boxes */
+        .cipher-box {
+            page-break-inside: avoid;
+        }
+        
+        .trial-label + .cipher-box {
+            page-break-before: avoid;
+        }
+        
+        .cipher-box {
+            background: #f9f7f4;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .trial-label {
+            font-weight: 600;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+        
+        .signature {
+            text-align: right;
+            margin-top: 50px;
+            font-style: italic;
+            color: #666;
+            border-top: 2px solid #d4af37;
+            padding-top: 20px;
+        }
+        
+        .postscript {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #555;
+            border-left: 3px solid #d4af37;
+            padding-left: 15px;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        strong {
+            color: #8b4513;
+            font-weight: 600;
+        }
+        
+        em {
+            color: #666;
+        }
+        
+        .ornament {
+            text-align: center;
+            font-size: 2rem;
+            color: #d4af37;
+            margin: 30px 0;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 20px;
+            }
+            .document-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+            }
+            
+            /* Add elegant decorative lines at page breaks */
+            .document-container::before {
+                content: '';
+                display: block;
+                height: 3px;
+                background: linear-gradient(to right, #d4af37, #f4e4bc, #d4af37);
+                margin-bottom: 30px;
+            }
+            
+            .document-container::after {
+                content: '';
+                display: block;
+                height: 3px;
+                background: linear-gradient(to right, #d4af37, #f4e4bc, #d4af37);
+                margin-top: 30px;
+            }
+            
+            /* Page break sections get decorative top lines */
+            h2:nth-of-type(2)::before, h2:nth-of-type(4)::before {
+                content: '';
+                display: block;
+                height: 3px;
+                background: linear-gradient(to right, #d4af37, #f4e4bc, #d4af37);
+                margin-bottom: 20px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <h1>Mein Tagebuch - Eine wunderbare Entdeckung</h1>
+        
+        <div class="date">15. März, im Jahr unserer seltsamen Zeit</div>
+        
+        <div class="greeting">Liebes Tagebuch,</div>
+        
+        <p>heute ist etwas Außergewöhnliches geschehen! Nach meinem Fall durch das Kaninchenloch dachte ich, ich hätte bereits alle Geheimnisse von Pwnderland entdeckt. Wie falsch ich lag!</p>
+        
+        <div class="ornament">• • •</div>
+        
+        <h2>Die Begegnung</h2>
+        
+        <p>Der Hutmacher erzählte mir heute von einer <strong>Gesellschaft der Erleuchteten</strong>, die schon lange vor unserer Zeit existierte. Er sagte, sie kamen aus einem fernen Land namens Deutschland - einem geheimnisvollen Ort, den er nicht näher beschreiben wollte. Diese weisen Männer suchten nach Wahrheiten, die vor gewöhnlichen Augen verborgen bleiben sollten.</p>
+        
+        <p>"Siehst du," flüsterte der Hutmacher und zeigte mir sein <strong>Augensymbol</strong> auf der Teekanne, "sie wussten, dass manche Dinge nur für jene bestimmt sind, die bereit sind zu sehen."</p>
+        
+        <h2>Meine Aufnahme</h2>
+        
+        <p>Die Märzhasen haben mich heute zu ihrem Kreis eingeladen! Es war aufregend und beängstigend zugleich. Sie gaben mir verschiedene Aufgaben:</p>
+        
+        <div class="trial-label"><strong>Erste Prüfung</strong> - Sie zeigten mir diese merkwürdigen Zeichen:</div>
+        <div class="cipher-box">
+            QWxpY2UgZmllbCBpbiBkYXMgS2FuaW5jaGVubG9jaA==
+        </div>
+        
+        <div class="trial-label"><strong>Zweite Prüfung</strong> - Ein seltsames Rätsel mit dem Hinweis "PWNDERLAND":</div>
+        <div class="cipher-box">
+            UKYOSN EHR ZWEGH VRMBVW
+        </div>
+        
+        <div class="trial-label"><strong>Dritte Prüfung</strong> - Ein einfaches Vertauschungsspiel:</div>
+        <div class="cipher-box">
+            GUVF VF ABG GUR NAFJRE
+        </div>
+        
+        <p>Ich habe alle drei Prüfungen bestanden, aber ich spüre, dass dies nur der Anfang war...</p>
+        
+        <div class="ornament">• • •</div>
+        
+        <h2>Das große Geheimnis</h2>
+        
+        <p>Aber der Hutmacher lächelte nur bei meinen Lösungen. "Alice," sagte er, "diese waren nur der Anfang. Die wahren Geheimnisse liegen nicht in Worten, sondern in dem, was das <strong>Auge</strong> sieht, wenn es richtig hinschaut."</p>
+        
+        <p>Er sprach von alten Dokumenten, die mehr enthalten als nur Text. "Die deutschen Meister," murmelte er, "versteckten ihre wichtigsten Lehren in <strong>Bildern</strong>, eingebettet in gewöhnliche Schriften."</p>
+        
+        <h2>Die finale Zeremonie</h2>
+        
+        <p>Morgen soll meine letzte Prüfung stattfinden. Der Hutmacher sagte, am Ende wird mir eine Frage gestellt werden, und ich muss die richtige Antwort geben - die gleiche Antwort, die alle Suchenden seit Jahrhunderten gegeben haben.</p>
+        
+        <p>Ich bin so aufgeregt! Was könnte diese finale Antwort sein?</p>
+        
+        <p>Die Gesellschaft hat mir versichert, dass alle ihre Geheimnisse in diesem Dokument enthalten sind - ich muss nur genau genug hinschauen...</p>
+        
+        <div class="ornament">• • •</div>
+        
+        <div class="postscript">
+            <em>P.S. - Der Hutmacher murmelte etwas über die Kunst der alten Meister, Wahrheiten zwischen den Zeilen zu verbergen. "Manchmal," sagte er mit einem verschmitzten Lächeln, "muss man mit anderen Augen schauen..."</em>
+        </div>
+        
+        <div class="signature">
+            <em>Unterschrift: Alice, angehende Sucherin der Wahrheit</em>
+        </div>
+    </div>
+</body>
+</html>
