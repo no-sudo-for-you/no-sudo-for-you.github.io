@@ -329,7 +329,7 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
                 
                 <div style="margin: 15px 0;">
                     <p><strong>Step 2:</strong> The result will be another cipher. Analyze the pattern and find the key:</p>
-                    <input type="text" class="cipher-input" id="vigenere-key" placeholder="Enter the cipher key (hint: it's a word from Alice in Wonderland)">
+                    <input type="text" class="cipher-input" id="vigenere-key" placeholder="Enter the cipher key (hint: it's a word from Alice in Pwnderland)">
                     <button onclick="decodeVigenere()">Decode with Key</button>
                 </div>
                 
@@ -455,11 +455,32 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
     </div>
 
     <script>
-        // Obfuscated busy beaver implementations (base64 encoded)
-        const xQ7 = "ewogICAgIkEiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiUiIsIm5leHRTdGF0ZSI6IkgifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJMIiwibmV4dFN0YXRlIjoiSCJ9CiAgICB9Cn0=";
-        const pZ9 = "ewogICAgIkEiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiUiIsIm5leHRTdGF0ZSI6IkIifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJMIiwibmV4dFN0YXRlIjoiQiJ9CiAgICB9LAogICAgIkIiOiB7CiAgICAgICAgIjAiOiB7IndyaXRlIjoxLCJtb3ZlIjoiTCIsIm5leHRTdGF0ZSI6IkEifSwKICAgICAgICAiMSI6IHsid3JpdGUiOjEsIm1vdmUiOiJSIiwibmV4dFN0YXRlIjoiSCJ9CiAgICB9Cn0=";
+        function computeHash(str) {
+            const s = str.toString().trim().toUpperCase();
+            let h = 0x811c9dc5;
+            for (let i = 0; i < s.length; i++) {
+                h ^= s.charCodeAt(i);
+                h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+            }
+            return h >>> 0;
+        }
         
-        // Challenge state tracking
+        function validateInput(input) {
+            const hash = computeHash(input);
+            
+            const validHashes = new Set([
+                0x340CA71C, 
+                0xD70C14B5, 
+                0xA9AB3E25, 
+                0x1EEB2EFD, 
+                0x360CAA42, 
+                0x300CA0D0, 
+                0x330CA589  
+            ]);
+            
+            return validHashes.has(hash);
+        }
+        
         let challengeState = {
             machine1Fixed: false,
             machine2Decrypted: false,
@@ -468,7 +489,6 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
         };
         
         let machines = {};
-        let bb4Value = 13; // The actual BB(4) value
         
         class TuringMachine {
             constructor(states, tape = [0], headPos = 0, currentState = 'A') {
@@ -532,15 +552,19 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
             const fix1a = document.getElementById('fix1a').value;
             const fix1b = document.getElementById('fix1b').value;
             
-            if (fix1a === '1' && fix1b === 'R') {
+            if (validateInput(fix1a) && validateInput(fix1b)) {
                 challengeState.machine1Fixed = true;
                 document.getElementById('run1').disabled = false;
                 document.getElementById('status1').textContent = "✅ Machine fixed! Ready to run.";
                 document.getElementById('status1').className = "status halted";
                 
-                // Create the fixed machine
-                const fixedStates = JSON.parse(atob(xQ7));
-                machines[1] = new TuringMachine(fixedStates);
+                const bb1States = {
+                    'A': {
+                        0: {write: 1, move: 'R', nextState: 'H'},
+                        1: {write: 1, move: 'R', nextState: 'H'}
+                    }
+                };
+                machines[1] = new TuringMachine(bb1States);
                 updateProgress();
             } else {
                 document.getElementById('status1').textContent = "❌ Incorrect fix. Try again!";
@@ -572,11 +596,9 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
         function decodeVigenere() {
             if (!document.getElementById('layer1-output').textContent.includes('V1Z')) return;
             
-            const key = document.getElementById('vigenere-key').value.toUpperCase().trim();
-            const correctKey = "RABBIT";
+            const key = document.getElementById('vigenere-key').value.trim();
             
-            if (key === correctKey) {
-                // Simulated Vigenère decode result
+            if (validateInput(key)) {
                 const decoded = "FGNGR N, FLZOBY 0 → JEVGR 1, ZBIR E, ARKG FGNGR O FGNGR N, FLZOBY 1 → JEVGR 1, ZBIR Y, ARKG FGNGR O FGNGR O, FLZOBY 0 → JEVGR 1, ZBIR Y, ARKG FGNGR N FGNGR O, FLZOBY 1 → JEVGR 1, ZBIR E, ARKG FGNGR U";
                 document.getElementById('layer2-output').textContent = decoded;
                 document.getElementById('layer2-output').style.color = '#2e7d32';
@@ -591,9 +613,9 @@ VjFaU1ExUnRVbGhUYkdocFVtdHdVRlpVUW10TlZscHlWbXhzVjJGc1NsaFVWVkpMVWpGS2RWSnVTbXRO
         function decodeFinal() {
             if (!document.getElementById('layer2-output').textContent.includes('FGNGR')) return;
             
-            const shift = parseInt(document.getElementById('final-shift').value);
+            const shift = document.getElementById('final-shift').value;
             
-            if (shift === 13) { // ROT13
+            if (validateInput(shift)) {
                 challengeState.machine2Decrypted = true;
                 document.getElementById('run2').disabled = false;
                 document.getElementById('decrypted-output2').style.display = 'block';
@@ -606,9 +628,8 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
                 `;
                 document.getElementById('status2').textContent = "🎉 All layers decrypted! Ready to run.";
                 document.getElementById('status2').className = "status halted";
-                
-                // Create the decrypted machine (BB(2))
-                const decryptedStates = {
+
+                const bb2States = {
                     'A': {
                         0: {write: 1, move: 'R', nextState: 'B'},
                         1: {write: 1, move: 'L', nextState: 'B'}
@@ -618,7 +639,7 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
                         1: {write: 1, move: 'R', nextState: 'H'}
                     }
                 };
-                machines[2] = new TuringMachine(decryptedStates);
+                machines[2] = new TuringMachine(bb2States);
                 updateProgress();
             } else {
                 document.getElementById('layer2-output').textContent = 'Incorrect Caesar shift!';
@@ -627,17 +648,16 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
         }
         
         function analyzeMachine3() {
-            const ones = parseInt(document.getElementById('trace-ones').value);
-            const steps = parseInt(document.getElementById('trace-steps').value);
-            const realBB3 = parseInt(document.getElementById('real-bb3').value);
+            const ones = document.getElementById('trace-ones').value;
+            const steps = document.getElementById('trace-steps').value;
+            const realBB3 = document.getElementById('real-bb3').value;
             
-            if (ones === 3 && steps === 5 && realBB3 === 6) {
+            if (validateInput(ones) && validateInput(steps) && validateInput(realBB3)) {
                 challengeState.machine3Analyzed = true;
                 document.getElementById('run3').disabled = false;
-                document.getElementById('status3').textContent = "✅ Analysis complete! The trace shows 3 ones in 5 steps, but BB(3) = 6.";
+                document.getElementById('status3').textContent = "✅ Analysis complete! Trace interpreted correctly.";
                 document.getElementById('status3').className = "status halted";
                 
-                // Create the actual BB(3) machine
                 const bb3States = {
                     'A': {
                         0: {write: 1, move: 'R', nextState: 'B'},
@@ -661,14 +681,13 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
         }
         
         function validateBB4() {
-            const bb4Input = parseInt(document.getElementById('bb4-research').value);
-            if (bb4Input === 13) {
+            const bb4Input = document.getElementById('bb4-research').value;
+            if (validateInput(bb4Input)) {
                 challengeState.machine4Researched = true;
                 document.getElementById('run4').disabled = false;
-                document.getElementById('status4').textContent = "✅ Correct! BB(4) = 13.";
+                document.getElementById('status4').textContent = "✅ Correct! Advanced machine verified!";
                 document.getElementById('status4').className = "status halted";
                 
-                // Create the actual BB(4) machine
                 const bb4States = {
                     'A': {
                         0: {write: 1, move: 'R', nextState: 'B'},
@@ -721,7 +740,7 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
             function runStep() {
                 if (machine.step()) {
                     updateDisplay(num);
-                    if (!machine.halted && machine.steps < 200) { // Safety limit
+                    if (!machine.halted && machine.steps < 200) {
                         setTimeout(runStep, 100);
                     }
                 } else {
@@ -747,7 +766,6 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
             const statusElement = document.getElementById(`status${num}`);
             const statsElement = document.getElementById(`stats${num}`);
             
-            // Update tape
             let tapeHTML = '';
             for (let i = 0; i < Math.max(5, machine.tape.length); i++) {
                 const cellClass = i === machine.headPos ? 'tape-cell head' : 'tape-cell';
@@ -755,7 +773,6 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
             }
             tapeElement.innerHTML = tapeHTML;
             
-            // Update status
             if (machine.halted) {
                 statusElement.textContent = `✅ Halted! Steps: ${machine.steps}, Ones: ${machine.countOnes()}`;
                 statusElement.className = 'status halted';
@@ -774,12 +791,146 @@ STATE B, SYMBOL 1 → WRITE 1, MOVE R, NEXT STATE H<br>
                 return;
             }
             
-            // The correct answers based on the challenges
-            const flag = 'AL1C3CTF{1_4_6_13}';
-            document.getElementById('finalFlag').value = flag;
+            let flagComponents = [];
+            
+            if (machines[1] && challengeState.machine1Fixed) {
+                machines[1].reset();
+                machines[1].step();
+                flagComponents.push(machines[1].countOnes().toString());
+            }
+            
+            if (machines[2] && challengeState.machine2Decrypted) {
+                machines[2].reset();
+                let steps = 0;
+                while (!machines[2].halted && steps < 100) {
+                    machines[2].step();
+                    steps++;
+                }
+                flagComponents.push(machines[2].countOnes().toString());
+            }
+            
+            if (machines[3] && challengeState.machine3Analyzed) {
+                machines[3].reset();
+                let steps = 0;
+                while (!machines[3].halted && steps < 100) {
+                    machines[3].step();
+                    steps++;
+                }
+                flagComponents.push(machines[3].countOnes().toString());
+            }
+            
+            if (machines[4] && challengeState.machine4Researched) {
+                machines[4].reset();
+                let steps = 0;
+                while (!machines[4].halted && steps < 200) {
+                    machines[4].step();
+                    steps++;
+                }
+                flagComponents.push(machines[4].countOnes().toString());
+            }
+            
+            if (flagComponents.length < 4) {
+                const stateHash = Object.values(challengeState).map(x => x ? 1 : 0).join('');
+                const derivedValues = stateHash.split('').map((bit, i) => {
+                    const base = parseInt(bit) + i;
+                    return [1, 4, 6, 13][i] || base;
+                });
+                flagComponents = derivedValues.map(v => v.toString());
+            }
+            
+            const chars = [65, 76, 49, 67, 51, 67, 84, 70];
+            const prefix = chars.map(c => String.fromCharCode(c)).join('') + '{';
+            const suffix = '}';
+            const joiner = '_';
+            
+            const finalFlag = prefix + flagComponents.join(joiner) + suffix;
+            document.getElementById('finalFlag').value = finalFlag;
+            
+            const fakeData = [];
+            for (let i = 0; i < 200; i++) {
+                const r = () => Math.floor(Math.random() * 50);
+                fakeData.push(`Candidate_${i}: AL1C3CTF{${r()}_${r()}_${r()}_${r()}}`);
+            }
             
             alert('🎉 Congratulations! You\'ve mastered the Mad Hatter\'s complex tea party! The flag has been generated.');
         }
+        
+        (function() {
+            let devtoolsOpen = false;
+            let warningCount = 0;
+            
+            function detectDevTools() {
+                const threshold = 160;
+                const heightDiff = window.outerHeight - window.innerHeight;
+                const widthDiff = window.outerWidth - window.innerWidth;
+                
+                if (heightDiff > threshold || widthDiff > threshold) {
+                    if (!devtoolsOpen) {
+                        devtoolsOpen = true;
+                        warningCount++;
+                        
+                        try {
+                            if (typeof console.clear === 'function') {
+                                console.clear();
+                            }
+                        } catch(e) {}
+                        
+                        if (warningCount === 1) {
+                            console.log('%c🚨 SECURITY ALERT 🚨', 'color: red; font-size: 24px; font-weight: bold;');
+                            console.log('%cDeveloper tools detected! This is a secure CTF challenge.', 'color: orange; font-size: 16px;');
+                            console.log('%cAll answers are cryptographically protected! 🔐', 'color: cyan; font-size: 14px;');
+                        }
+                        
+                        const prefixes = ['AL1C3CTF{', 'FLAG{', 'CTF{', 'PWN{', 'HACK{'];
+                        const patterns = [
+                            () => `${Math.floor(Math.random() * 10)}_${Math.floor(Math.random() * 10)}_${Math.floor(Math.random() * 10)}_${Math.floor(Math.random() * 10)}`,
+                            () => `${Math.floor(Math.random() * 50)}_${Math.floor(Math.random() * 50)}_${Math.floor(Math.random() * 50)}_${Math.floor(Math.random() * 50)}`,
+                            () => `busy_beaver_${Math.floor(Math.random() * 100)}`,
+                            () => `${Math.random().toString(36).substring(7)}_${Math.random().toString(36).substring(7)}`,
+                            () => `BB${Math.floor(Math.random() * 10)}_${Math.floor(Math.random() * 100)}`
+                        ];
+                        
+                        for (let i = 0; i < 150; i++) {
+                            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                            const pattern = patterns[Math.floor(Math.random() * patterns.length)]();
+                            const flag = prefix + pattern + '}';
+                            console.log(`Decoy_${i}: ${flag}`);
+                            
+                            if (i % 20 === 0) {
+                                console.log('Hash validation:', Math.random().toString(16));
+                                console.log('Secure computation:', Math.floor(Math.random() * 0xFFFFFF).toString(16));
+                            }
+                        }
+                        
+                        console.log('Security protocols active...');
+                        console.log('Anti-tamper systems engaged...');
+                        console.log('Cryptographic validation complete...');
+                    }
+                } else {
+                    devtoolsOpen = false;
+                }
+            }
+            
+            setInterval(detectDevTools, 1000);
+            
+            setInterval(() => {
+                if (devtoolsOpen) {
+                    try {
+                        for (let i = 0; i < 10; i++) {
+                            console.log(`Security_Log_${Date.now()}_${Math.random().toString(36)}`);
+                        }
+                    } catch(e) {}
+                }
+            }, 2000);
+        })();
+        
+        const securityStub = () => 'CLASSIFIED_DATA';
+        window.cheatCode = securityStub;
+        window.getAnswers = securityStub;
+        window.showFlag = securityStub;
+        window.bypass = securityStub;
+        window.debug = securityStub;
+        window.solve = securityStub;
     </script>
 </body>
 </html>
