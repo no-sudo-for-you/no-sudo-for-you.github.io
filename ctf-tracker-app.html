@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Flag Tracker</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--dark-color);
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--secondary-color);
+        }
+        
+        .forms-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .button-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .button-success {
+            background-color: var(--success-color);
+        }
+        
+        .button-success:hover {
+            background-color: #27ae60;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .tab-container {
+            margin-bottom: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark-color);
+            position: relative;
+        }
+        
+        .tab.active {
+            color: var(--secondary-color);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .category-filter {
+            margin-bottom: 20px;
+        }
+        
+        .export-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .notification {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .notification-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .notification-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .filter-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        #search-input {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .forms-container {
+                flex-direction: column;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .filter-group, #search-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CTF Flag Tracker</h1>
+            <div>
+                <button id="export-btn" title="Export data as JSON">Export Data</button>
+                <button id="import-btn" title="Import data from JSON">Import Data</button>
+                <button id="reset-btn" class="button-danger" title="Clear all data">Reset</button>
+            </div>
+        </header>
+        
+        <div id="notification" class="notification"></div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Challenges</h3>
+                <div id="total-challenges" class="value">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Solved Challenges</h3>
+                <div id="solved-challenges" class="value">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completion Rate</h3>
+                <div id="completion-rate" class="value">0%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Points</h3>
+                <div id="total-points" class="value">0</div>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="challenges">Challenges</div>
+                <div class="tab" data-tab="add">Add Challenge</div>
+                <div class="tab" data-tab="submit">Submit Flag</div>
+            </div>
+            
+            <div id="challenges-tab" class="tab-content active">
+                <div class="filter-section">
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="category-filter">Category</label>
+                            <select id="category-filter">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="status-filter">Status</label>
+                            <select id="status-filter">
+                                <option value="all">All Statuses</option>
+                                <option value="solved">Solved</option>
+                                <option value="unsolved">Unsolved</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" id="search-input">
+                            <label for="search">Search</label>
+                            <input type="text" id="search" placeholder="Search by name, description, or flag">
+                        </div>
+                        <button id="clear-filters">Clear Filters</button>
+                    </div>
+                </div>
+                
+                <div id="loader" class="loader"></div>
+                
+                <table id="challenges-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Points</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="challenges-body">
+                        <!-- Challenge rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="add-tab" class="tab-content">
+                <div class="form-section">
+                    <h2>Add New Challenge</h2>
+                    <form id="add-challenge-form">
+                        <div class="form-group">
+                            <label for="challenge-name">Challenge Name *</label>
+                            <input type="text" id="challenge-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="challenge-category">Category *</label>
+                            <input type="text" id="challenge-category" list="categories" required>
+                            <datalist id="categories">
+                                <!-- Categories will be added here -->
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="challenge-points">Points</label>
+                            <input type="number" id="challenge-points" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="challenge-description">Description</label>
+                            <textarea id="challenge-description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="challenge-flag">Flag (if known)</label>
+                            <input type="text" id="challenge-flag">
+                        </div>
+                        <button type="submit" class="button-success">Add Challenge</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="submit-tab" class="tab-content">
+                <div class="form-section">
+                    <h2>Submit Flag</h2>
+                    <form id="submit-flag-form">
+                        <div class="form-group">
+                            <label for="flag-challenge">Challenge *</label>
+                            <select id="flag-challenge" required>
+                                <option value="">Select a challenge</option>
+                                <!-- Unsolved challenges will be added here -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="flag-value">Flag *</label>
+                            <input type="text" id="flag-value" required>
+                        </div>
+                        <button type="submit" class="button-success">Submit Flag</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="export-section">
+            <h3>Backup and Restore</h3>
+            <p>You can export your data to save it or transfer it to another device. To restore your data, use the import button.</p>
+        </div>
+    </div>
+    
+    <!-- Challenge Details Modal -->
+    <div id="challenge-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Challenge Details</h2>
+            <div id="modal-content">
+                <!-- Challenge details will be added here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Import Data</h2>
+            <p>Paste your exported JSON data below:</p>
+            <div class="form-group">
+                <textarea id="import-data" placeholder="Paste JSON data here"></textarea>
+            </div>
+            <button id="confirm-import" class="button-success">Import</button>
+        </div>
+    </div>
+    
+    <!-- Reset Confirmation Modal -->
+    <div id="reset-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirm Reset</h2>
+            <p>Are you sure you want to reset all data? This action cannot be undone.</p>
+            <div class="action-buttons">
+                <button id="confirm-reset" class="button-danger">Yes, Reset All Data</button>
+                <button id="cancel-reset">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize app state
+            let appState = {
+                challenges: [],
+                categories: new Set()
+            };
+            
+            // Load data from localStorage
+            function loadData() {
+                const savedData = localStorage.getItem('ctfTrackerData');
+                if (savedData) {
+                    try {
+                        appState = JSON.parse(savedData);
+                        appState.categories = new Set(appState.categories || []);
+                        updateUI();
+                        showNotification('Data loaded successfully!', 'success');
+                    } catch (error) {
+                        showNotification('Error loading data: ' + error.message, 'error');
+                    }
+                }
+            }
+            
+            // Save data to localStorage
+            function saveData() {
+                try {
+                    const dataToSave = {
+                        challenges: appState.challenges,
+                        categories: Array.from(appState.categories)
+                    };
+                    localStorage.setItem('ctfTrackerData', JSON.stringify(dataToSave));
+                } catch (error) {
+                    showNotification('Error saving data: ' + error.message, 'error');
+                }
+            }
+            
+            // Update UI elements
+            function updateUI() {
+                updateStats();
+                updateChallengesTable();
+                updateCategoryFilter();
+                updateCategoryDatalist();
+                updateFlagChallengeSelect();
+            }
+            
+            // Update statistics
+            function updateStats() {
+                const totalChallenges = appState.challenges.length;
+                const solvedChallenges = appState.challenges.filter(c => c.solved).length;
+                const completionRate = totalChallenges > 0 ? Math.round((solvedChallenges / totalChallenges) * 100) : 0;
+                const totalPoints = appState.challenges.filter(c => c.solved).reduce((sum, c) => sum + (c.points || 0), 0);
+                
+                document.getElementById('total-challenges').textContent = totalChallenges;
+                document.getElementById('solved-challenges').textContent = solvedChallenges;
+                document.getElementById('completion-rate').textContent = completionRate + '%';
+                document.getElementById('total-points').textContent = totalPoints;
+            }
+            
+            // Update challenges table
+            function updateChallengesTable() {
+                const tableBody = document.getElementById('challenges-body');
+                const categoryFilter = document.getElementById('category-filter').value;
+                const statusFilter = document.getElementById('status-filter').value;
+                const searchFilter = document.getElementById('search').value.toLowerCase();
+                
+                // Clear table
+                tableBody.innerHTML = '';
+                
+                // Filter challenges
+                let filteredChallenges = appState.challenges;
+                
+                if (categoryFilter !== 'all') {
+                    filteredChallenges = filteredChallenges.filter(c => c.category === categoryFilter);
+                }
+                
+                if (statusFilter !== 'all') {
+                    filteredChallenges = filteredChallenges.filter(c => {
+                        return (statusFilter === 'solved' && c.solved) || (statusFilter === 'unsolved' && !c.solved);
+                    });
+                }
+                
+                if (searchFilter) {
+                    filteredChallenges = filteredChallenges.filter(c => {
+                        return c.name.toLowerCase().includes(searchFilter) || 
+                               (c.description && c.description.toLowerCase().includes(searchFilter)) ||
+                               (c.flag && c.flag.toLowerCase().includes(searchFilter));
+                    });
+                }
+                
+                // Sort challenges (solved at bottom)
+                filteredChallenges.sort((a, b) => {
+                    if (a.solved !== b.solved) return a.solved ? 1 : -1;
+                    return 0;
+                });
+                
+                // Add challenge rows
+                filteredChallenges.forEach((challenge, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${challenge.name}</td>
+                        <td>${challenge.category}</td>
+                        <td>${challenge.points || 0}</td>
+                        <td><span class="badge ${challenge.solved ? 'badge-success' : 'badge-warning'}">${challenge.solved ? 'Solved' : 'Unsolved'}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-small view-btn" data-id="${index}">View</button>
+                                <button class="btn-small edit-btn" data-id="${index}">Edit</button>
+                                <button class="btn-small button-danger delete-btn" data-id="${index}">Delete</button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // No challenges message
+                if (filteredChallenges.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="5" style="text-align: center;">No challenges found</td>`;
+                    tableBody.appendChild(row);
+                }
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        viewChallenge(id);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        editChallenge(id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        deleteChallenge(id);
+                    });
+                });
+            }
+            
+            // Update category filter
+            function updateCategoryFilter() {
+                const categoryFilter = document.getElementById('category-filter');
+                const currentValue = categoryFilter.value;
+                
+                // Clear options
+                categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+                
+                // Add categories
+                Array.from(appState.categories).sort().forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+                
+                // Restore selected value if possible
+                if (Array.from(appState.categories).includes(currentValue)) {
+                    categoryFilter.value = currentValue;
+                } else {
+                    categoryFilter.value = 'all';
+                }
+            }
+            
+            // Update category datalist
+            function updateCategoryDatalist() {
+                const categoriesDatalist = document.getElementById('categories');
+                
+                // Clear options
+                categoriesDatalist.innerHTML = '';
+                
+                // Add categories
+                Array.from(appState.categories).sort().forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    categoriesDatalist.appendChild(option);
+                });
+            }
+            
+            // Update flag challenge select
+            function updateFlagChallengeSelect() {
+                const flagChallengeSelect = document.getElementById('flag-challenge');
+                const currentValue = flagChallengeSelect.value;
+                
+                // Clear options
+                flagChallengeSelect.innerHTML = '<option value="">Select a challenge</option>';
+                
+                // Add unsolved challenges
+                const unsolvedChallenges = appState.challenges.filter(c => !c.solved);
+                
+                unsolvedChallenges.forEach((challenge, index) => {
+                    const option = document.createElement('option');
+                    option.value = challenge.id;
+                    option.textContent = challenge.name;
+                    flagChallengeSelect.appendChild(option);
+                });
+                
+                // Restore selected value if possible
+                if (currentValue && unsolvedChallenges.some(c => c.id === currentValue)) {
+                    flagChallengeSelect.value = currentValue;
+                } else {
+                    flagChallengeSelect.value = '';
+                }
+            }
+            
+            // Show notification
+            function showNotification(message, type) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = 'notification notification-' + type;
+                notification.style.display = 'block';
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Add challenge
+            function addChallenge(challenge) {
+                // Generate unique ID
+                challenge.id = Date.now().toString();
+                
+                // Add to challenges
+                appState.challenges.push(challenge);
+                
+                // Add category to set
+                if (challenge.category) {
+                    appState.categories.add(challenge.category);
+                }
+                
+                // Save and update UI
+                saveData();
+                updateUI();
+                
+                // Show notification
+                showNotification('Challenge added successfully!', 'success');
+            }
+            
+            // View challenge
+            function viewChallenge(index) {
+                const challenge = appState.challenges[index];
+                const modal = document.getElementById('challenge-modal');
+                const modalTitle = document.getElementById('modal-title');
+                const modalContent = document.getElementById('modal-content');
+                
+                // Set modal title
+                modalTitle.textContent = challenge.name;
+                
+                // Set modal content
+                modalContent.innerHTML = `
+                    <div style="margin-bottom: 15px;">
+                        <strong>Category:</strong> ${challenge.category}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Points:</strong> ${challenge.points || 0}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Status:</strong> 
+                        <span class="badge ${challenge.solved ? 'badge-success' : 'badge-warning'}">${challenge.solved ? 'Solved' : 'Unsolved'}</span>
+                    </div>
+                    ${challenge.description ? `
+                    <div style="margin-bottom: 15px;">
+                        <strong>Description:</strong>
+                        <p style="white-space: pre-line;">${challenge.description}</p>
+                    </div>` : ''}
+                    ${challenge.flag && challenge.solved ? `
+                    <div style="margin-bottom: 15px;">
+                        <strong>Flag:</strong>
+                        <code style="display: block; padding: 10px; background-color: #f5f5f5; border-radius: 4px; margin-top: 5px; word-break: break-all;">${challenge.flag}</code>
+                    </div>` : ''}
+                    ${challenge.notes ? `
+                    <div style="margin-bottom: 15px;">
+                        <strong>Notes:</strong>
+                        <p style="white-space: pre-line;">${challenge.notes}</p>
+                    </div>` : ''}
+                    ${challenge.solved ? `
+                    <div style="margin-bottom: 15px;">
+                        <strong>Solved at:</strong> ${new Date(challenge.solvedAt).toLocaleString()}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Solved by:</strong> ${challenge.solvedBy || 'Unknown'}
+                    </div>` : ''}
+                `;
+                
+                // Show modal
+                modal.style.display = 'block';
+            }
+            
+            // Edit challenge
+            function editChallenge(index) {
+                const challenge = appState.challenges[index];
+                
+                // Create edit form
+                const form = document.createElement('form');
+                form.innerHTML = `
+                    <div class="form-group">
+                        <label for="edit-name">Challenge Name *</label>
+                        <input type="text" id="edit-name" required value="${challenge.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-category">Category *</label>
+                        <input type="text" id="edit-category" list="edit-categories" required value="${challenge.category}">
+                        <datalist id="edit-categories">
+                            ${Array.from(appState.categories).map(cat => `<option value="${cat}">`).join('')}
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-points">Points</label>
+                        <input type="number" id="edit-points" min="0" value="${challenge.points || 0}">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description">Description</label>
+                        <textarea id="edit-description">${challenge.description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-flag">Flag</label>
+                        <input type="text" id="edit-flag" value="${challenge.flag || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-notes">Notes</label>
+                        <textarea id="edit-notes">${challenge.notes || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="edit-solved" ${challenge.solved ? 'checked' : ''}>
+                            Mark as solved
+                        </label>
+                    </div>
+                    ${challenge.solved ? `
+                    <div class="form-group">
+                        <label for="edit-solve
