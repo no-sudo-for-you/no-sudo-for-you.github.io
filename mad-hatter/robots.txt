@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /mad-hatter/teacup.html
+Disallow: /mad-hatter/dormouse/
+
+# The Hatter's first riddle:
+# "I'm filled with leaves but never grow,
+# I'm lifted high but never fly,
+# Find me where the steam flows,
+# My handle points to the sky."
+# Answer: dGVhY3VwLmh0bWw= (base64 for "teacup.html")
