@@ -171,23 +171,23 @@ img {
     height: auto;
 }
 
-/* Specific image sizing for each page - fill their containers better */
+/* Specific image sizing for each page - make them much larger */
 .teapot img {
     width: 100%;
-    max-width: 600px;
+    max-width: 750px;
 }
 
 .teacup-display img {
     width: 100%;
-    max-width: 550px;
+    max-width: 700px;
 }
 
 .dormouse img {
     width: 100%;
-    max-width: 500px;
+    max-width: 650px;
 }
 
 .march-hare img {
     width: 100%;
-    max-width: 580px;
+    max-width: 720px;
 }
