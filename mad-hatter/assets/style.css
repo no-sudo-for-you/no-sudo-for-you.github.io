@@ -1,6 +1,6 @@
 body {
     font-family: 'Georgia', serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 50%, #9333EA 100%);
     color: #333;
     margin: 0;
     padding: 20px;
@@ -10,62 +10,89 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 1px solid #E5E7EB;
 }
 
 h1 {
-    color: #4a148c;
+    color: #7C3AED;
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+h2 {
+    color: #6B46C1;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: #553C9A;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+h4 {
+    color: #4C1D95;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
 }
 
 .teapot, .teacup-display, .dormouse, .march-hare {
     text-align: center;
-    margin: 20px 0;
+    margin: 25px 0;
 }
 
+/* Main content boxes with purple borders */
 .teacup-inscription, .dream-sequence, .workshop-table {
-    background: #f8f9fa;
-    border: 2px solid #4a148c;
+    background: white;
+    border: 2px solid #7C3AED;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 25px 0;
+}
+
+/* Yellow accent boxes */
+.nightmare-scribbles, .final-essence, .tea-leaves {
+    background: #FEF3C7;
+    border: 1px solid #F59E0B;
     border-radius: 10px;
     padding: 20px;
     margin: 20px 0;
 }
 
-.nightmare-scribbles, .final-essence, .tea-leaves {
-    background: #fff3cd;
-    border: 1px solid #ffc107;
-    border-radius: 5px;
-    padding: 15px;
+/* Green accent boxes */
+.recipe-card, .alchemy-instructions, .essence-container, .message-in-the-leaves {
+    background: #ECFDF5;
+    border: 1px solid #10B981;
+    border-radius: 10px;
+    padding: 20px;
     margin: 15px 0;
 }
 
-.recipe-card, .alchemy-instructions, .essence-container {
-    background: #e8f5e8;
-    border: 1px solid #4caf50;
-    border-radius: 5px;
-    padding: 15px;
-    margin-top: 10px;
-}
-
+/* Warning/alert boxes */
 .warning-note {
-    background: #f8d7da;
-    border: 1px solid #dc3545;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-    color: #721c24;
+    background: #FEE2E2;
+    border: 1px solid #EF4444;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    color: #991B1B;
 }
 
-.scribble-text, .message-in-the-leaves {
+/* Code and scribble text styling */
+.scribble-text {
     font-family: 'Courier New', monospace;
-    background: #f4f4f4;
-    padding: 10px;
-    border-radius: 3px;
-    margin: 5px 0;
+    background: #F3F4F6;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid #D1D5DB;
 }
 
 .incoherent {
@@ -74,34 +101,70 @@ h1 {
 }
 
 code {
-    background: #f4f4f4;
-    padding: 2px 6px;
-    border-radius: 3px;
+    background: #F3F4F6;
+    padding: 4px 8px;
+    border-radius: 6px;
     font-family: 'Courier New', monospace;
     word-break: break-all;
+    border: 1px solid #D1D5DB;
+    font-size: 0.9rem;
 }
 
+/* Button styling */
 .return-link {
     display: inline-block;
-    background: #4a148c;
+    background: #7C3AED;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .return-link:hover {
-    background: #6a1b9a;
+    background: #6D28D9;
 }
 
+/* Text styling */
 .motto {
     font-style: italic;
-    color: #666;
+    color: #6B7280;
     text-align: center;
-    margin: 20px 0;
+    margin: 25px 0;
+    font-size: 1.1rem;
 }
 
 .sleep-mumble {
     opacity: 0.7;
+    font-style: italic;
+}
+
+/* Paragraph spacing */
+p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* List styling */
+ol, ul {
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+/* Make strong text more visible */
+strong {
+    color: #4C1D95;
+    font-weight: bold;
+}
+
+/* Center images properly */
+img {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
