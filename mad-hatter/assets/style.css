@@ -35,7 +35,7 @@ h1 {
     margin: 20px 0;
 }
 
-.nightmare-scribbles, .final-essence {
+.nightmare-scribbles, .final-essence, .tea-leaves {
     background: #fff3cd;
     border: 1px solid #ffc107;
     border-radius: 5px;
@@ -60,7 +60,7 @@ h1 {
     color: #721c24;
 }
 
-.scribble-text {
+.scribble-text, .message-in-the-leaves {
     font-family: 'Courier New', monospace;
     background: #f4f4f4;
     padding: 10px;
