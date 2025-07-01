@@ -27,7 +27,7 @@ h1 {
     margin: 20px 0;
 }
 
-.riddle-box, .dream-bubble, .final-riddle {
+.teacup-inscription, .dream-sequence, .workshop-table {
     background: #f8f9fa;
     border: 2px solid #4a148c;
     border-radius: 10px;
@@ -35,15 +35,7 @@ h1 {
     margin: 20px 0;
 }
 
-.treat-hint {
-    background: #e8f5e8;
-    border: 1px solid #4caf50;
-    border-radius: 5px;
-    padding: 15px;
-    margin-top: 15px;
-}
-
-.encoded-message {
+.tea-leaves, .scattered-papers, .hare-note {
     background: #fff3cd;
     border: 1px solid #ffc107;
     border-radius: 5px;
@@ -51,11 +43,20 @@ h1 {
     margin: 15px 0;
 }
 
+.recipe-card, .recipe-instructions {
+    background: #e8f5e8;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
 code {
     background: #f4f4f4;
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
+    word-break: break-all;
 }
 
 .return-link {
@@ -72,8 +73,13 @@ code {
     background: #6a1b9a;
 }
 
-.hint {
+.motto {
     font-style: italic;
     color: #666;
-    font-size: 0.9em;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.sleep-mumble {
+    opacity: 0.7;
 }

@@ -1,10 +1,9 @@
 User-agent: *
-Disallow: /mad-hatter/teacup.html
-Disallow: /mad-hatter/dormouse/
+Disallow: /mad-hatter/private/
+Disallow: /mad-hatter/admin/
+Allow: /mad-hatter/
 
-# The Hatter's first riddle:
-# "I'm filled with leaves but never grow,
-# I'm lifted high but never fly,
-# Find me where the steam flows,
-# My handle points to the sky."
-# Answer: dGVhY3VwLmh0bWw= (base64 for "teacup.html")
+# Site maintenance notes:
+# Remember: the vessel from which we sip
+# When leaves steep and steam does rise  
+# File: dGVhY3VwLmh0bWw=
