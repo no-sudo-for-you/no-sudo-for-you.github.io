@@ -5,5 +5,5 @@ Allow: /mad-hatter/
 
 # Site maintenance notes:
 # Remember: the vessel from which we sip
-# When leaves steep three times over and steam does rise  
+# When leaves steep three times over, wisdom is found
 # File: WkVkV2FGa3pWbmRNYldnd1lsZDNQUT09
