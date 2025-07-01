@@ -163,8 +163,31 @@ strong {
     font-weight: bold;
 }
 
-/* Center images properly */
+/* Center images properly and control sizes */
 img {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 100%;
+    height: auto;
+}
+
+/* Specific image sizing for each page */
+.teapot img {
+    max-width: 400px;
+    width: 100%;
+}
+
+.teacup-display img {
+    max-width: 350px;
+    width: 100%;
+}
+
+.dormouse img {
+    max-width: 300px;
+    width: 100%;
+}
+
+.march-hare img {
+    max-width: 380px;
+    width: 100%;
 }
